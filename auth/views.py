@@ -3,7 +3,12 @@ from flask import Blueprint, render_template, url_for
 
 # Views stores all end points (urls), ROTAS do meu projeto
 # Blueprint: aplicacoes (funcionalidades dentro de um projeto) reutilizaveis
-auth_bp = Blueprint("auth", __name__, template_folder="templates", static_folder="static")
+auth_bp = Blueprint(
+    "auth", 
+    __name__, 
+    template_folder="templates", 
+    static_folder="static",
+    url_prefix="/user")
 
 def configure(app):
     app.register_blueprint(auth_bp)
@@ -14,4 +19,4 @@ def index():
 
 @auth_bp.route("/register", methods=["POST"])
 def register():
-    return "Working!!"
+    return render_template("auth/register.html")

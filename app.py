@@ -2,6 +2,7 @@
 
 from flask import Flask
 from auth.views import configure as config_auth
+from auth.models import configure as config_db
 
 
 def create_app():
@@ -10,6 +11,7 @@ def create_app():
 
 # configurando visualizacoes
     config_auth(app)
+    config_db(app)
 
     return app
 
