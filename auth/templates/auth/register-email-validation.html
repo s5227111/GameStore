@@ -1,0 +1,113 @@
+{% extends 'auth/base.html' %} {%block heading%}
+<link
+  rel="stylesheet"
+  href="{{ url_for('auth.static', filename='auth/css/base.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('auth.static', filename='auth/css/register-email-validation.css') }}"
+/>
+{% endblock %} {% block content %}
+<main class="vh-70">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card text-white" style="border-radius: 1rem">
+          <div class="card-body p-5 text-center card-control">
+            <div class="mb-md-5 mt-md-4 pb-5 card-container">
+              <h2 class="fw-bold mb-2 text-uppercase">
+                Please type your e-mail
+              </h2>
+              <p class="text-gray-50 mb-5 card-caption">
+                We will send you an email to confirm it.
+              </p>
+              <div class="form-outline form-white mb-4">
+                <div class="button-container">
+                  <div class="card-item">
+                    <form method="post" action="">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          class="form-control card-input"
+                          id="inputEmail"
+                          name="email"
+                          aria-describedby="inputHelp"
+                          autocomplete="off"
+                          maxlength="100"
+                          required
+                        />
+                        <span
+                          id="inputHelp"
+                          class="form-text text-muted"
+                        ></span>
+                        <label for="email"></label>
+                      </div>
+                      <div class="btn-wrapper">
+                        <button
+                          type="submit"
+                          class="btn btn-primary confirm-button"
+                          id="jsDisableButton"
+                          disabled="disabled"
+                        >
+                          Send confirmation email
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for if the user already exists starts here -->
+  <!-- Button to trigger modal -->
+  <meta id="errorMessage" data-value="{{email_exists}}" />
+
+  <dialog class="message-modal" id="modalMessage" tabindex="-1">
+    <div class="modal-container">
+      <div class="text-container">
+        <h5 class="modal-text">
+          Opps... Looks like this email is already registered!
+        </h5>
+        <p class="text-wrap">
+          If this account belongs to you, don't worry. We will help you to
+          recover
+        </p>
+      </div>
+      <div class="image-container">
+        <img
+          src="{{ url_for('auth.static', filename='auth/images/ops.jpg') }}"
+          class="modal-image"
+        />
+      </div>
+      <div class="btn-change-email">
+        <form action="{{url_for('auth.email_validation')}}">
+          <button
+            type="submit"
+            class="btn btn-primary confirm-button"
+            id="jsDisableButton"
+          >
+            Change email
+          </button>
+        </form>
+      </div>
+      <div class="btn-recovery-account">
+        <form action="#">
+          <button
+            type="submit"
+            class="btn btn-primary confirm-button"
+            id="jsDisableButton"
+          >
+            Retrieve account
+          </button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+</main>
+<script src="{{ url_for('auth.static', filename='auth/scripts/register-email-validation.js') }}"></script>
+{% endblock %}

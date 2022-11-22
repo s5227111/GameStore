@@ -1,0 +1,111 @@
+{% extends 'authentication_pages/base.html' %} {%block heading%}
+<link
+  rel="stylesheet"
+  href="{{ url_for('authentication_pages.static', filename='authentication_pages/css/base.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="{{ url_for('authentication_pages.static', filename='authentication_pages/css/validate-username.css') }}"
+/>
+{% endblock %} {% block content %}
+<main class="vh-70">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card text-white" style="border-radius: 1rem">
+          <div class="card-body p-5 text-center card-control">
+            <div class="mb-md-5 mt-md-4 pb-5 card-container">
+              <h2 class="fw-bold mb-2 text-uppercase">
+                Digite seu nome de usuário
+              </h2>
+              <p class="text-gray-50 mb-5 card-caption">
+                Diga-nos como deveremos te chamar.
+              </p>
+              <div class="form-outline form-white mb-4">
+                <div class="button-container">
+                  <div class="card-item">
+                    <form method="post" action="">
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          class="form-control card-input"
+                          id="inputUsername"
+                          name="username"
+                          aria-describedby="inputHelp"
+                          autocomplete="off"
+                          maxlength="100"
+                          required
+                        />
+                        <span
+                          id="inputHelp"
+                          class="form-text text-muted"
+                        ></span>
+                      </div>
+                      <div class="btn-wrapper">
+                        <button
+                          type="submit"
+                          class="btn btn-primary confirm-button"
+                          id="jsDisableButton"
+                          disabled="disabled"
+                        >
+                          Verificar disponibilidade
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal para caso o usuário já exista começa aqui-->
+  <!-- Botão para acionar modal -->
+  <meta id="errorMessage" data-value="{{aleardy_exists_username}}" />
+
+  <dialog class="message-modal" id="modalMessage" tabindex="-1">
+    <div class="modal-container">
+      <div class="text-container">
+        <h5 class="modal-text">
+          Opps... Parece que este username já está cadastrado!
+        </h5>
+        <p class="text-wrap">
+          Caso esta conta te pertença não se preocupe. Iremos te ajudar a
+          recuperar
+        </p>
+      </div>
+      <div class="image-container">
+        <img
+          src="{{ url_for('authentication_pages.static', filename='authentication_pages/images/ops.jpg') }}"
+          class="modal-image"
+        />
+      </div>
+      <div class="btn-change-username">
+        <form action="{{url_for('authentication_pages.username_validation')}}">
+          <button
+            type="submit"
+            class="btn btn-primary confirm-button"
+            id="jsDisableButton"
+          >
+            Change user name
+          </button>
+        </form>
+      </div>
+      <div class="btn-recovery-account">
+        <form action="#">
+          <button
+            type="submit"
+            class="btn btn-primary confirm-button"
+            id="jsDisableButton"
+          >
+            Retrieve account
+          </button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+</main>
+<script src="{{ url_for('authentication_pages.static', filename='authentication_pages/scripts/register-username-validation.js') }}"></script>
+{% endblock %}

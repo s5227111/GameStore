@@ -1,0 +1,20 @@
+.error-container{
+    margin: auto;
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+    align-items: center;
+}
+
+.image-container{
+    margin: auto;
+}
+
+.error-image{
+    width: 500px;
+    height: 350px;
+}
+
+.text-container{
+    margin: auto;
+
+}

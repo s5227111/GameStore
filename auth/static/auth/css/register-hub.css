@@ -1,0 +1,97 @@
+main{
+    pad: 0;
+    background-color: #e6ebed;
+}
+
+.container{
+    padding-top: 110px;
+}
+
+.card-control{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,.1);
+}
+
+.card-body{
+    color: #ccc;
+}
+
+.card-inner{
+    width: 100%;
+}
+
+.card-caption{
+    font-weight: 400;
+    line-height: 1.25rem;
+    margin-bottom: 1.5rem; 
+    color: #112C3D;
+}
+
+
+
+.text-uppercase{
+    color: #112C3D;
+}
+
+.card-text{
+    color: blue;
+}
+
+
+
+.grid-container{
+    margin: 10px 0;
+    display: grid;
+    grid-template-columns: 1fr 7fr;
+    grid-template-rows: 1fr 1fr;
+    align-items:flex-start ; 
+    border: none !important;
+}
+
+.card-first-item{
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,.1);
+    margin-bottom: 25px;
+}
+
+.card-icon{ 
+
+    margin-top: 10px;
+ 
+    color: #199FC9;
+}
+
+.card-icon-container{   
+    border: 1px solid #ccc;
+    border-radius: 75%;
+    width: 50px;
+    height: 50px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    margin-left: 5px;
+}
+
+.card-under-text-container > h5{
+    font-weight: bold;
+    color: black;
+    font-size: larger;
+}
+
+.card-description-container > p{
+    font-weight: 600;
+    color: #2d3245;
+    font-size: small;
+}
+
+
+.button-container{
+    padding-top: 20px;
+    width: 250px;
+    padding-left: 50px; 
+    margin: auto;
+    align-items: center;
+}
+
+.btn-primary{
+    background-color: #199FC9;
+}
