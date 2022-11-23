@@ -24,43 +24,66 @@ def home():
 def register():
     return render_template("auth/register.html")
 
-@auth_bp.route("/email-validation", methods=["POST", "GET"])
-def email_validation():
+@auth_bp.route("/validate-email", methods=["POST", "GET"])
+def validate_email():
     
     # Verify if email is already exists 
     email_exists = False
+
     if request.method == "POST":
+
         try:
-            email = request.form.get("email")
+            email = request.form["email"]
 
             # Verify if email is already exists
             user = UserQuery.get_user_by_email(email)
+
             if user:
                 email_exists = True 
+
+                # Json de retorno
+                return_json = {
+                    "error": "Email already exists",
+                    "email_exists": email_exists,
+                    "status_code": 400,
+                }
+
                 return render_template(
-                    "auth/register-email-validation.html", 
+                    "auth/validate_email.html", 
                     email_exists=email_exists
-                    )
+                ), return_json, 400
+
             session["email"] = email
             session["on_register"] = True
             
+            return_json = {
+                    "error": "Email validated",
+                    "email_exists": email_exists,
+                    "status_code": 200,
+            }
+
             return redirect(
-                url_for(
-                    "auth.register_username_validation"))
+                url_for("auth.validate-username")), 200, return_json
 
-        except KeyError():
-            return redirect("auth.register")
+        except KeyError:
 
-    return render_template("auth/register-email-validation.html")
+            return_json = {
+                "error": "Email not found",
+                "email_exists": email_exists,
+                "status_code": 400,
+            }
+            return redirect("auth.register"), 400, return_json
 
-@auth_bp.route("/username-validation", methods=["POST", "GET"])
-def username_validation():
+    return render_template("auth/validate_email.html"), 200, return_json
+
+@auth_bp.route("/validate-username", methods=["POST", "GET"])
+def validate_username():
 
     username_exists = False
 
     if request.method == "POST":
         try:
-            username = request.form.get("username")
+            username = request.form["username"]
 
             # Verify if username is already exists
             user = UserQuery.get_user_by_username(username)
@@ -69,7 +92,7 @@ def username_validation():
             if user:
                 username_exists = True 
                 return render_template(
-                    "auth/register-username-validation.html", 
+                    "auth/validate_username.html", 
                     username_exists=username_exists
                     )
             
@@ -78,10 +101,10 @@ def username_validation():
                 session["username"] = username
                 return redirect(
                     url_for(
-                        "auth.register_password_validation"))
+                        "auth.validate_password"))
         
         # Verify if username is already exists
         except KeyError():
             return redirect("auth.register")
     
-    return render_template("auth/register-username-validation.html")
+    return render_template("auth/validate_username.html")

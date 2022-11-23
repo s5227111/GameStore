@@ -5,8 +5,22 @@ class TestUserRegister(TestAuthBase):
 
     """ Test Case for User Register API """
 
-    def test_expect_return_code_200(self):
+    def test_user_register(self):
+        """ Test User Register """
+        response = self.client.get(url_for("auth.register"))
+        self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(url_for("auth.register"))
-        expected = 200
-        self.assertEqual(response.status_code, expected)
+    def test_email_null(self):
+        """ Test Email NULL """
+        response = self.client.post(
+            url_for("auth.validate_email"))
+        self.assertEqual(response.status_code, 400)
+    
+    def test_invalid_email(self):
+        """ Test Invalid Email """
+
+        invalid_email = ("email": "testmail.com")
+
+        response = self.client.post(
+            url_for("auth.validate_email"))
+        self.assertEqual(response.status_code, 400)

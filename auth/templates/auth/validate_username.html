@@ -1,11 +1,11 @@
-{% extends 'authentication_pages/base.html' %} {%block heading%}
+{% extends 'auth/base.html' %} {%block heading%}
 <link
   rel="stylesheet"
-  href="{{ url_for('authentication_pages.static', filename='authentication_pages/css/base.css') }}"
+  href="{{ url_for('auth.static', filename='auth/css/base.css') }}"
 />
 <link
   rel="stylesheet"
-  href="{{ url_for('authentication_pages.static', filename='authentication_pages/css/validate-username.css') }}"
+  href="{{ url_for('auth.static', filename='auth/css/validate-username.css') }}"
 />
 {% endblock %} {% block content %}
 <main class="vh-70">
@@ -78,18 +78,18 @@
       </div>
       <div class="image-container">
         <img
-          src="{{ url_for('authentication_pages.static', filename='authentication_pages/images/ops.jpg') }}"
+          src="{{ url_for('auth.static', filename='auth/images/ops.jpg') }}"
           class="modal-image"
         />
       </div>
       <div class="btn-change-username">
-        <form action="{{url_for('authentication_pages.username_validation')}}">
+        <form action="{{url_for('auth.username_validation')}}">
           <button
             type="submit"
             class="btn btn-primary confirm-button"
             id="jsDisableButton"
           >
-            Change user name
+            Alterar nome de usuário
           </button>
         </form>
       </div>
@@ -100,12 +100,12 @@
             class="btn btn-primary confirm-button"
             id="jsDisableButton"
           >
-            Retrieve account
+            Recuperar conta
           </button>
         </form>
       </div>
     </div>
   </dialog>
 </main>
-<script src="{{ url_for('authentication_pages.static', filename='authentication_pages/scripts/register-username-validation.js') }}"></script>
+<script src="{{ url_for('auth.static', filename='auth/scripts/register-username-validation.js') }}"></script>
 {% endblock %}

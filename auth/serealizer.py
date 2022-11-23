@@ -16,19 +16,6 @@ class UserSchema(Schema):
     is_active = fields.Boolean(dump_only=True)
     joined_at = fields.DateTime(dump_only=True)
 
-    # class Meta:
-    #     ordered = True
-
-    # @staticmethod
-    # def validate_username(username: str) -> Union[ValidationError, None]:
-    #     if User.query.filter_by(username=username).first():
-    #         raise ValidationError('Username already exists')
-
-    # @staticmethod
-    # def validate_email(email: str) -> Union[ValidationError, None]:
-    #     if User.query.filter_by(email=email).first():
-    #         raise ValidationError('Email already exists')
-
     # function that loads after all the data is validated
     @post_load
     def create_user(self, data, **kwargs) -> Union[User, ValidationError]:

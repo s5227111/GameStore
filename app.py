@@ -5,13 +5,13 @@ from auth.views import configure as config_auth
 from auth.models import configure as config_db
 
 
-def create_app():
+def create_app(test_mode=False):
     #Initialize Flask framework
     app = Flask(__name__)
 
-# configurando visualizacoes
+    # configurando visualizacoes
     config_auth(app)
-    config_db(app)
+    config_db(app, test_mode)
 
     return app
 

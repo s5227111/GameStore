@@ -10,9 +10,13 @@ from typing import Union
 pymysql.install_as_MySQLdb()
 db = SQLAlchemy()
 
-def configure(app):
+def configure(app, test_mode=False):
 
-    DB_URI = "mysql://root:newcicle23@127.0.0.1/gs_user_data"
+    if test_mode:
+        DB_URI = "mysql://root:newcicle23@127.0.0.1/unittest_gamestore"
+    else:
+        DB_URI = "mysql://root:newcicle23@127.0.0.1/gs_user_data"
+
     app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
 
     db.init_app(app)
