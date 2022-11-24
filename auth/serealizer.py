@@ -1,8 +1,8 @@
 # verify data input 
-from marshmallow import Schema, fields, validate, ValidationError
+from marshmallow import Schema, fields, validate, ValidationError, post_load
 from typing import Union
 
-from models import User
+from .models import User
 
 class UserSchema(Schema):
 
@@ -20,5 +20,7 @@ class UserSchema(Schema):
     @post_load
     def create_user(self, data, **kwargs) -> Union[User, ValidationError]:
         """ Create User """
-
-        return User(**data)
+        user = User(**data)
+        user.hash_password()
+        
+        return user

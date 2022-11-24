@@ -1,7 +1,7 @@
 {% extends 'auth/base.html' %} {% block heading %}
 <link
   rel="stylesheet"
-  href="{{url_for('authentication_pages.static', filename='authentication_pages/css/login-style.css')}}"
+  href="{{url_for('auth.static', filename='authcss/login-style.css')}}"
 />
 {% endblock %} {% block content %}
 <section class="vh-100" style="background-color: #eee">
@@ -18,7 +18,7 @@
                 <div class="text-center">
                   <img
                     class="rounded mx-auto d-block"
-                    src="{{url_for('authentication_pages.static', filename='authentication_pages/images/default-user-image.jpeg')}}"
+                    src="{{url_for('auth.static', filename='auth/images/default-user-image.jpeg')}}"
                     height="100px"
                     width="100p"
                   />
@@ -93,11 +93,3 @@
 </section>
 
 {% endblock %}
-
-<!-- extend base html -->
-<!-- Path: authentication\templates\auth\base.html -->
-{% extends 'base.html' %} {% block heading %} {% endblock %} {% block content %}
-{% endblock %}
-<!-- add a new style css file -->
-
-<!-- add a div called container -->

@@ -63,7 +63,7 @@
   </div>
   <!-- Modal para caso o usuário já exista começa aqui-->
   <!-- Botão para acionar modal -->
-  <meta id="errorMessage" data-value="{{aleardy_exists_username}}" />
+  <meta id="errorMessage" data-value="{{username_exists}}" />
 
   <dialog class="message-modal" id="modalMessage" tabindex="-1">
     <div class="modal-container">
@@ -83,7 +83,7 @@
         />
       </div>
       <div class="btn-change-username">
-        <form action="{{url_for('auth.username_validation')}}">
+        <form action="{{url_for('auth.validate_username')}}">
           <button
             type="submit"
             class="btn btn-primary confirm-button"

@@ -19,4 +19,4 @@ def create_app(test_mode=False):
 # Executa quando utilizamos python3 app.py no terminal
 if __name__ == "__main__": 
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=True, port=8080)
