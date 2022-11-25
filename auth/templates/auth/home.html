@@ -1,12 +1,5 @@
-<section>
-  {% if session.is_loggedin %}
-  <p>Hi, {{session.username}}! it's good to have you back here!</p>
-  <br />
-  <a href="{{url_for('auth.logout')}}">logout</a>
-  {{session.user_data}} {% else %}
-  <p>
-    It looks like you are not logged in. Click
-    <a href="{{url_for('auth.login')}}"> here</a> to enter
-  </p>
-  {% endif %}
-</section>
+{%block content %} {% if current_user.is_authenticated %}
+<span>Hi {{current_user.username}}, it is good to have you back!</span>
+{% else %}
+<span>It seems that you are not logged in!</span>
+{% endif %} {% endblock %}

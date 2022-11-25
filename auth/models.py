@@ -46,7 +46,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(255), nullable=False)
 
     is_email_verified = db.Column(db.Boolean, default=False)
-    is_active = db.Column(db.Boolean, default=False)
+    # is_active = db.Column(db.Boolean, default=False)
     joined_at = db.Column(db.DateTime, default=db.func.now())
 
     # Relationships one-to-one PersonalData
@@ -211,8 +211,10 @@ class UserQuery:
     def get_user_by_username_or_email(username_or_email: str) -> Union[User, None]:
         query = (
             db.session.execute(
-                db.select(User).where(User.username == username_or_email)
-                | (User.email == username_or_email)
+                db.select(User).where(
+                    (User.username == username_or_email)
+                    | (User.email == username_or_email)
+                )
             )
             .scalars()
             .first()

@@ -1,11 +1,11 @@
-{% extends 'authentication_pages/base.html' %} {%block heading%}
+{% extends 'auth/base.html' %} {%block heading%}
 <link
   rel="stylesheet"
-  href="{{ url_for('authentication_pages.static', filename='authentication_pages/css/base.css') }}"
+  href="{{ url_for('authentication_pages.static', filename='auth/css/base.css') }}"
 />
 <link
   rel="stylesheet"
-  href="{{ url_for('authentication_pages.static', filename='authentication_pages/css/404.css') }}"
+  href="{{ url_for('authentication_pages.static', filename='auth/css/404.css') }}"
 />
 {% endblock %} {% block content %}
 <main class="vh-70">
@@ -14,7 +14,7 @@
       <div class="error-container">
         <div class="image-container">
           <img
-            src="{{url_for('authentication_pages.static', filename='authentication_pages/images/ops.jpg')}}"
+            src="{{url_for('authentication_pages.static', filename='auth/images/ops.jpg')}}"
             alt=""
             class="error-image"
           />

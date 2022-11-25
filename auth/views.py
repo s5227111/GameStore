@@ -50,14 +50,14 @@ def login():
             username_email = request.form["username"]
             password = request.form["password"]
             # Try to find the user by email
-            user = UserQuery.get_user_by_email(username_email)
+            user = UserQuery.get_user_by_username_or_email(username_email)
 
             if user:
                 # Berify if password is correct
                 if user.check_password_hash(password):
                     # Login user
                     login_user(user)
-                    return redirect(url_for("auth.home"))
+                    return redirect(url_for("auth.user_profile"))
 
             # If do not find username or pwd
             wrong_credentials = True
@@ -70,6 +70,14 @@ def login():
             return abort(400)
 
     return render_template("auth/login.html")
+
+
+@auth_bp.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    session.clear()
+    return redirect(url_for(auth.home))
 
 
 @auth_bp.route("/register", methods=["POST", "GET"])
@@ -101,6 +109,7 @@ def validate_email():
                     400,
                 )
 
+            # TODO SEND CONFIRMATION EMAIL
             session["email"] = email
             session["on_register"] = True
 
@@ -190,7 +199,7 @@ def validate_password():
 
                 current_app.db.session.commit()
                 session.clear()
-                return redirect(url_for("auth.home"))
+                return redirect(url_for("auth.login"))
 
             except ValidationError:
                 return abort(404), 400
@@ -204,6 +213,54 @@ def validate_password():
         return render_template("auth/validate_password.html")
 
     return redirect(url_for("auth.register"))
+
+
+@auth_bp.route("/forgot-password", methods=["POST", "GET"])
+def forgot_password():
+
+    if request.method == "POST":
+        try:
+            email = request.form["email"]
+            new_password = request.form["password"]
+
+            # Verify if email is registered on the db
+            user = UserQuery.get_user_by_email(email)
+
+            if user:
+                # Send email to retrieve password
+
+                # Assumes that all is validated to change password
+                # TODO IMPLEMENT EMAIL SENDING WITH TOKEN TO RETRIEVE PASSWORD
+                user.password = new_password
+                user.hash_password()
+
+                # Update PasswordReset table
+                user.password_reset.token = (
+                    None  # When implement email sending, remove this line
+                )
+                user.password_reset.is_used = (
+                    True  # When implement email sending, remove this line
+                )
+
+                current_app.db.session.commit()
+                return redirect(url_for("auth.login"))
+
+        # EMAIL NULL
+        except KeyError:
+            return abort(400)
+
+    return render_template("auth/forgot_password.html")
+
+
+@auth_bp.route("/user-profile", methods=["GET"])
+@login_required
+def user_profile():
+    # IMPLEMENT USER PROFILE PAGE
+    user = UserQuery.get_user_by_id(current_user.id)
+
+    user_data = user.to_dict()
+
+    return user_data
 
 
 # Error handlers
