@@ -61,6 +61,8 @@ class Game:
         percentage_negative: float - Percentage of negative reviews
         comments: list - Game comments
 
+    tags: list - Game tags
+
     """
 
     _id: Union[str, ObjectId]
@@ -73,6 +75,7 @@ class Game:
     attributes: Optional[object] = None
     reviews: Optional[object] = None
     images: Optional[object] = None
+    tags: Optional[list] = None
 
     def __post_init__(self) -> None:
         """
@@ -142,6 +145,69 @@ class GameCollectionQuery:
         result = [Game(**game) for game in result]
         return result
 
+    @staticmethod
+    def get_products_by_filters(
+        start_at: int, 
+        limit: int, 
+        tag: str,
+        **kwargs
+        ) -> list:
+        
+        """
+        Returns all games from the product collection that contain the passed tag
+        The method supports passing parameters explicitly or via kwargs
+        If both are passed, only kwargs will be considered.
+        This implies that explicitly passed parameters will take precedence over kwargs
+        Also, different filters can be passed if using by kwargs, although the result is unexpected
+        """
+
+        if kwargs:
+            filters = kwargs 
+        else:
+            filters = {
+                "tags": {"$in": [tag]}
+            }
+
+        collection = mongo.cx["Catalog"]["games"]
+        result = collection.find(filters).skip(start_at).limit(limit)
+        result = [Game(**game) for game in result]
+        return result
+    
+
+    @staticmethod
+    def full_text_search(query_text: str) -> list:
+        """
+        Returns all games from the product collection that contain the passed search string
+        """
+
+        collection = mongo.cx["Catalog"]["games"]
+        search_pipeline = GameCollectionQuery().full_text_search_pipeline(query_text)
+        result = collection.aggregate(search_pipeline)
+        result = [Game(**game) for game in result]
+        return result
+    
+    @staticmethod
+    def generate_search_pipeline(query_text: str) -> list:
+        """
+        Generate the search pipeline
+        """
+        search_index = "default"
+
+        pipeline = [
+        {
+            "$search": {
+                'index': search_index,
+                'text': {
+                    'query': query_text,
+                    'path': {
+                        'wildcard': "*"
+                    }
+                }
+            }
+        }
+    ]
+
+        return pipeline
 
 mongo = PyMongo()
 
