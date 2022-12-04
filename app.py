@@ -1,4 +1,4 @@
-# implementar padrao de projeto onde vou colocar aqui todas as configuracoes do aplicativo
+# implement design pattern where I will put all the application settings here
 
 from flask import Flask
 from auth.views import configure as config_auth
@@ -23,7 +23,7 @@ def create_app(test_mode=False):
     return app
 
 
-# Executa quando utilizamos python3 app.py no terminal
+# executes when we use python3 app.py in the terminal
 if __name__ == "__main__":
     app = create_app()
     app.run(debug=True, port=8080)

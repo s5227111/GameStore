@@ -4,6 +4,9 @@ from flask_pymongo import PyMongo, ObjectId
 from typing import Union, Optional
 from dataclasses import dataclass, asdict
 
+from .api_errors import MissingRequiredField, UnexpectedFieldError
+
+
 # Command used only for MacOs, should not be used in production
 import certifi
 
@@ -29,53 +32,55 @@ class Game:
     Parameters
     ----------
 
-    _id: Union[str, ObjectId]
+    _id: Union[str, ObjectId] - for the business logic, the _id is the MongoDB id
     game_id: str - Game id
     name: str - Game name
-    short_description: str - Game short description
-
-    pricing: object
-        listed_price: float - Game listed price
-        discount_percentage: float - Game discount percentage
-        final_price: float - Game final price
+    added_at: str - Game added date
+    developer: str - Game developer
+    downloads: int - Game downloads
+    pricing: float - Game price
+    tags: list - Game tags
+    images: list - Game images
+    details: dict - Game details
+    reviews: object (required)
 
     !!! ATTENTION !!!
-    # TODO: implement business logic
-    # Temporaly set as optional
-    attributes: object (optional)
-        minimum_players: int - Game minimum players
-        maximum_players: int - Game maximum players
-        minimum_playtime: int - Game minimum playtime
-        maximum_playtime: int - Game maximum playtime
-        minimum_age: int - Game minimum age
+    Disambiguity: For business logic, the _id field will not be our id but the MongoDB id.
+    We must always look for game_id to reference the game id of our application
 
-    images: object (optional)
-        cover: str - Game cover image
-        gallery: list - Game gallery images
+    Also, _id is treated by the dataclass as an optional attribute, as MongoDB creates the ObjectId automatically
+    when we need to insert a new game into the database. However, for business logic, the attribute
+    _id is required as we need to know which game we are updating or deleting.
+    In other words, the _id attribute is mandatory for business logic, but optional for MongoDB.
+    Your searches like "update", "edit" and "delete" should start from the premise that the _id attribute is mandatory, while
+    during the insertion of a new game, the _id attribute MUST NOT BE PASSED.
 
-    reviews: object (required)
-        total: int - Total reviews
-        positive: int - Positive reviews
-        negative: int - Negative reviews
-        percentage_positive: float - Percentage of positive reviews
-        percentage_negative: float - Percentage of negative reviews
-        comments: list - Game comments
-
-    tags: list - Game tags
+    The business model does not support the creation of new fields, that is, if MongoDB returns a field that is not
+    defined in the class, an exception will be thrown.
+    At the same time, the business model does not support the creation of empty fields, that is, if MongoDB returns a
+    empty field, an exception will be thrown.
+    Finally, if during the creation of a new game, some 'strange' field is passed, an exception will be thrown.
+    This is done to ensure semi-structured data. Still, you can use additional fields in
+    fields that are of type "dict" or "list". For example, it is possible to create a game by inserting the value 'colors': ['red', 'blue'],
+    inside the details field. However, it is not possible to create a book by entering the value 'colors': ['red', 'blue'].
 
     """
 
-    _id: Union[str, ObjectId]
-    game_id: str
+    # _id: Union[str, ObjectId]
+    game_id: int
     name: str
-    short_description: str
+    added_at: str
+    developer: str
+    downloads: int
+    pricing: float
+    tags: list
+    images: list
+    details: dict
+    reviews: dict
 
-    pricing: object
+    _id: Optional[Union[str, ObjectId]] = None
 
-    attributes: Optional[object] = None
-    reviews: Optional[object] = None
-    images: Optional[object] = None
-    tags: Optional[list] = None
+    # tags: Optional[list] = None
 
     def __post_init__(self) -> None:
         """
@@ -100,11 +105,16 @@ class Game:
         :return: bool
         """
         required_fields = [
-            "_id",
             "game_id",
             "name",
-            "short_description",
+            "added_at",
+            "developer",
+            "downloads",
             "pricing",
+            "images",
+            "details",
+            "reviews",
+            "tags",
         ]
 
         for field in required_fields:
@@ -119,11 +129,64 @@ class Game:
         """
         return {k: v for k, v in asdict(self).items() if v is not None}
 
+    @classmethod
+    def verify_fields(cls, data: dict) -> bool:
+        """
+        Check if the fields of the passed data are valid
+
+        :param data: dict
+        :return: bool
+        """
+
+        # Check if the fields are valid
+        required_fields = [
+            "game_id",
+            "name",
+            "added_at",
+            "developer",
+            "downloads",
+            "pricing",
+            "images",
+            "details",
+            "reviews",
+            "tags",
+        ]
+
+        for field in required_fields:
+            if field not in data:
+                raise MissingRequiredField(f"Missing required field: {field}")
+
+        # Check if the fields are correct
+        for field, value in data.items():
+            if field in cls.__annotations__:
+                if not isinstance(value, cls.__annotations__[field]):
+                    raise TypeError(f"Invalid type for field {field}")
+
+        # Check if there are additional fields
+        for field in data:
+            if field not in cls.__annotations__:
+                raise UnexpectedFieldError(f"Unexpected field: {field}")
+
 
 class GameCollectionQuery:
     """
     Class responsible for querying the game collection
     """
+
+    @staticmethod
+    def get_product_by_game_id(game_id: str) -> Union[Game, None]:
+        """
+        Get a game by game_id
+
+        :param game_id: str
+        :return: Game
+        """
+
+        collection = mongo.cx["Catalog"]["games"]
+
+        data = collection.find_one({"game_id": game_id})
+
+        return Game(**data) if data else None
 
     @staticmethod
     def get_all_products(start_at: int, limit: int) -> list:
@@ -146,13 +209,8 @@ class GameCollectionQuery:
         return result
 
     @staticmethod
-    def get_products_by_filters(
-        start_at: int, 
-        limit: int, 
-        tag: str,
-        **kwargs
-        ) -> list:
-        
+    def get_products_by_filters(start_at: int, limit: int, tag: str, **kwargs) -> list:
+
         """
         Returns all games from the product collection that contain the passed tag
         The method supports passing parameters explicitly or via kwargs
@@ -162,17 +220,14 @@ class GameCollectionQuery:
         """
 
         if kwargs:
-            filters = kwargs 
+            filters = kwargs
         else:
-            filters = {
-                "tags": {"$in": [tag]}
-            }
+            filters = {"tags": {"$in": [tag]}}
 
         collection = mongo.cx["Catalog"]["games"]
         result = collection.find(filters).skip(start_at).limit(limit)
         result = [Game(**game) for game in result]
         return result
-    
 
     @staticmethod
     def full_text_search(query_text: str) -> list:
@@ -185,7 +240,7 @@ class GameCollectionQuery:
         result = collection.aggregate(search_pipeline)
         result = [Game(**game) for game in result]
         return result
-    
+
     @staticmethod
     def generate_search_pipeline(query_text: str) -> list:
         """
@@ -194,20 +249,70 @@ class GameCollectionQuery:
         search_index = "default"
 
         pipeline = [
-        {
-            "$search": {
-                'index': search_index,
-                'text': {
-                    'query': query_text,
-                    'path': {
-                        'wildcard': "*"
-                    }
+            {
+                "$search": {
+                    "index": search_index,
+                    "text": {"query": query_text, "path": {"wildcard": "*"}},
                 }
             }
-        }
-    ]
+        ]
 
         return pipeline
+
+    @staticmethod
+    def edit_product_by_gameId(query_id, **kwargs) -> bool:
+        """
+        Edit a game by game_id
+
+        :param query_id: str
+        :param kwargs: dict
+        :return: bool
+        """
+
+        collection = mongo.cx["Catalog"]["games"]
+        result = collection.update_one({"game_id": query_id}, {"$set": kwargs})
+        return bool(result.modified_count)
+
+    @staticmethod
+    def delete_product_by_gameId(query_id) -> bool:
+        """
+        Delete a game by game_id
+
+        :param query_id: str
+        :return: bool
+        """
+
+        collection = mongo.cx["Catalog"]["games"]
+        result = collection.delete_one({"game_id": query_id})
+        return bool(result.deleted_count)
+
+    @staticmethod
+    def create_product(product: Game) -> bool:
+        """
+        Create a game into the game collection
+
+        As the parameter is a Game object, we assume it is already validated
+
+
+        :param product: Game
+        :return: bool
+        """
+
+        # Verify if Game object is type Game
+        if not isinstance(product, Game):
+            return False
+
+        game_dict = product.to_dict()
+
+        # Delete the field _id if exists. Mongo creates automatically
+        game_dict.pop("_id", None)
+
+        # Add to db
+
+        collection = mongo.cx["Catalog"]["games"]
+        result = collection.insert_one(game_dict)
+        return bool(result.inserted_id)
+
 
 mongo = PyMongo()
 
