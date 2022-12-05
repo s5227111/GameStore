@@ -74,7 +74,7 @@ class Game:
     downloads: int
     pricing: float
     tags: list
-    images: list
+    images: dict
     details: dict
     reviews: dict
 

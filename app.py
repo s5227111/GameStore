@@ -7,6 +7,8 @@ from auth.models import configure as config_db
 from api_catalog.views import configure as config_api_catalog
 from api_catalog.models import configure as config_db_api_catalog
 
+from catalog.views import configure as config_catalog
+
 
 def create_app(test_mode=False):
     # Initialize Flask framework
@@ -15,6 +17,7 @@ def create_app(test_mode=False):
     # configuring views
     config_auth(app)
     config_api_catalog(app)
+    config_catalog(app)
 
     # configuring bd
     config_db(app, test_mode)

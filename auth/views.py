@@ -57,7 +57,7 @@ def login():
                 if user.check_password_hash(password):
                     # Login user
                     login_user(user)
-                    return redirect(url_for("auth.user_profile"))
+                    return redirect(url_for("catalog.home"))
 
             # If do not find username or pwd
             wrong_credentials = True
@@ -77,7 +77,7 @@ def login():
 def logout():
     logout_user()
     session.clear()
-    return redirect(url_for(auth.home))
+    return redirect(url_for("catalog.home"))
 
 
 @auth_bp.route("/register", methods=["POST", "GET"])

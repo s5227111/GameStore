@@ -61,6 +61,9 @@ class User(db.Model, UserMixin):
     # Relationships one-to-one PasswordReset
     password_reset = db.relationship("PasswordReset", backref="users", uselist=False)
 
+    # Relationships one-to-many Games
+    my_games = db.relationship("myGames", backref="users")
+
     def hash_password(self) -> None:
         self.password = generate_password_hash(self.password)
 
@@ -179,6 +182,25 @@ class PasswordReset(db.Model):
 
     def __repr__(self):
         return f"<ResetPassword> user_id={self.user_id}, token={self.token}, expires_at={self.expires_at}, is_used={self.is_used}"
+
+
+class myGames(db.Model):
+    __tablename__ = "my_games"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    game_id = db.Column(db.Integer, unique=True)
+
+    def to_dict(self) -> dict:
+        my_games_dict = {
+            "id": self.id,
+            "user_id": self.user_id,
+            "game_id": self.game_id,
+        }
+        return my_games_dict
+
+    def __repr__(self):
+        return f"<myGames> user_id={self.user_id}, game_id={self.game_id}"
 
 
 class UserQuery:
