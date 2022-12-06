@@ -64,6 +64,9 @@ class User(db.Model, UserMixin):
     # Relationships one-to-many Games
     my_games = db.relationship("myGames", backref="users")
 
+    # Relationships one-to-many userCart
+    user_cart = db.relationship("userCart", backref="users")
+
     def hash_password(self) -> None:
         self.password = generate_password_hash(self.password)
 
@@ -82,6 +85,8 @@ class User(db.Model, UserMixin):
             "contact": self.contact.to_dict(),
             "address": self.address.to_dict(),
             "password_reset": self.password_reset.to_dict(),
+            "my_games": [game.to_dict() for game in self.my_games],
+            "user_cart": [cart.to_dict() for cart in self.user_cart],
         }
 
     def save(self) -> Union[db.Model, None]:
@@ -190,17 +195,48 @@ class myGames(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     game_id = db.Column(db.Integer, unique=True)
+    added_at = db.Column(db.DateTime, default=db.func.now())
+    is_downloaded = db.Column(db.Boolean, default=False)  # if the game is downloaded
 
     def to_dict(self) -> dict:
         my_games_dict = {
             "id": self.id,
             "user_id": self.user_id,
             "game_id": self.game_id,
+            "added_at": self.added_at,
+            "is_downloaded": self.is_downloaded,
         }
         return my_games_dict
 
     def __repr__(self):
         return f"<myGames> user_id={self.user_id}, game_id={self.game_id}"
+
+
+class userCart(db.Model):
+    """
+    User cart
+    """
+
+    __tablename__ = "user_cart"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    game_id = db.Column(
+        db.Integer, unique=True
+    )  # game id is an id that refers to collection of games
+    added_at = db.Column(db.DateTime, default=db.func.now())
+
+    def to_dict(self) -> dict:
+        user_cart_dict = {
+            "id": self.id,
+            "user_id": self.user_id,
+            "game_id": self.game_id,
+            "added_at": self.added_at,
+        }
+        return user_cart_dict
+
+    def __repr__(self):
+        return f"<userCart> user_id={self.user_id}, game_id={self.game_id}"
 
 
 class UserQuery:

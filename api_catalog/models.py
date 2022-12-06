@@ -129,6 +129,26 @@ class Game:
         """
         return {k: v for k, v in asdict(self).items() if v is not None}
 
+    def __eq__(self, __o: object) -> bool:
+        """
+        Check if the object is equal to another object
+        """
+        if isinstance(__o, Game):
+            return self.game_id == __o.game_id
+        return False
+
+    def __hash__(self) -> int:
+        """
+        Hash the object
+        """
+        return hash(self.game_id)
+
+    def __repr__(self) -> str:
+        """
+        Return the string representation of the object
+        """
+        return f"Game({self.game_id}, {self.name})"
+
     @classmethod
     def verify_fields(cls, data: dict) -> bool:
         """
@@ -209,7 +229,14 @@ class GameCollectionQuery:
         return result
 
     @staticmethod
-    def get_products_by_filters(start_at: int, limit: int, tag: str, **kwargs) -> list:
+    def get_products_by_filters(
+        start_at: int = None,
+        limit: int = None,
+        tag: str = None,
+        developer: str = None,
+        # Tuple unpacking
+        **kwargs,
+    ) -> list:
 
         """
         Returns all games from the product collection that contain the passed tag
@@ -222,7 +249,11 @@ class GameCollectionQuery:
         if kwargs:
             filters = kwargs
         else:
-            filters = {"tags": {"$in": [tag]}}
+            filters = {
+                "tags": {"$in": [tag]},
+                "developer": developer,
+                "game_id": game_id,
+            }
 
         collection = mongo.cx["Catalog"]["games"]
         result = collection.find(filters).skip(start_at).limit(limit)

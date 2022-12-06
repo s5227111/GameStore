@@ -76,7 +76,8 @@ def get_all_games():
     # Filtering search params
     tag = request.args.get("tag", None)
     developer = request.args.get("developer", None)
-
+    game_id = request.args.get("game_id", None)
+    game_id = int(game_id) if game_id else None
     request_params = {"start_at": start_at, "limit": limit}
 
     # If the limit is greater than 100, the API will return only 100 results
@@ -84,7 +85,7 @@ def get_all_games():
     limit = limit if limit <= 100 and limit > 0 else 100
     start_at = start_at if start_at >= 0 else 0
 
-    filters = {"tag": tag, "developer": developer}
+    filters = {"tag": tag, "developer": developer, "game_id": game_id}
 
     if any(filters.values()):
         games = GameCollectionQuery.get_products_by_filters(start_at, limit, **filters)
