@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, url_for, redirect, request
 from flask_login import current_user
 
 import requests
+from datetime import datetime
 
 catalog = Blueprint(
     "catalog",
@@ -22,6 +23,10 @@ def configure(app):
 @catalog.route("/")
 def home():
 
+    user_games_ids = []
+    user_games = []
+    games_count = 0
+
     # Get all games
     home_games = requests.get(
         url_for("api_catalog.get_all_games", _external=True),
@@ -29,7 +34,32 @@ def home():
         timeout=30,
     ).json()["data"]
 
-    return render_template("catalog/index.html", home_games=home_games)
+    # If user is authenticated, get the games from my_games
+    if current_user.is_authenticated:
+        # As the table contains only indexes it is necessary to make a request on MongoDB
+        user_games_ids = [game.game_id for game in current_user.my_games]
+
+        # Search on the API the games that are on the list
+        for game_id in user_games_ids:
+            game = requests.get(
+                url_for("api_catalog.get_all_games", _external=True),
+                params={"game_id": game_id},
+                timeout=30,
+            ).json()["data"]
+            user_games.append(game[0])
+
+        games_count = len(user_games)
+
+        # Change added_at to a more legible date
+        for game in current_user.my_games:
+            game.added_at = datetime.strftime(game.added_at, "%d/%m/%Y")
+
+    return render_template(
+        "catalog/index.html",
+        home_games=home_games,
+        user_games=user_games,
+        games_count=games_count,
+    )
 
 
 @catalog.route("/details")
@@ -37,6 +67,7 @@ def details():
     game_id = request.args.get("game_id", None)
     game_id = int(game_id) if game_id else None
     is_in_my_games = False
+    user_games_ids = []
 
     game_dict = requests.get(
         url_for("api_catalog.get_all_games", game_id=game_id, _external=True),
@@ -63,7 +94,7 @@ def details():
 
         related_games += requests.get(
             url_for("api_catalog.get_all_games", _external=True),
-            params={"tag": tag},
+            params={"tags": tag},
             timeout=30,
         ).json()["data"]
 

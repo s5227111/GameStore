@@ -17,7 +17,7 @@ avaible_images = [
     "/catalog/static/catalog/images/popular-08.jpg",
 ]
 
-game_id = 0
+game_id = 9
 while True:
     game_id += 1
 

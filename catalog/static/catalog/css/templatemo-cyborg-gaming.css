@@ -31,10 +31,64 @@ font & reset css
 reset
 --------------------------------------------- 
 */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, div
-pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q,
-s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
-figure, header, nav, section, article, aside, footer, figcaption {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+div pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+figure,
+header,
+nav,
+section,
+article,
+aside,
+footer,
+figcaption {
   margin: 0;
   padding: 0;
   border: 0;
@@ -62,13 +116,20 @@ html[xmlns] .clearfix {
   height: 1%;
 }
 
-ul, li {
+ul,
+li {
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
-header, nav, section, article, aside, footer, hgroup {
+header,
+nav,
+section,
+article,
+aside,
+footer,
+hgroup {
   display: block;
 }
 
@@ -76,8 +137,9 @@ header, nav, section, article, aside, footer, hgroup {
   box-sizing: border-box;
 }
 
-html, body {
-  font-family: 'Poppins', sans-serif;
+html,
+body {
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
   background-color: #1e1e1e;
   font-size: 16px;
@@ -87,14 +149,19 @@ html, body {
 }
 
 a {
-	color: #CCC;
+  color: #ccc;
   text-decoration: none !important;
 }
 a:hover {
-	color: #F99;
+  color: #f99;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin-top: 0px;
   margin-bottom: 0px;
   color: #fff;
@@ -124,7 +191,7 @@ Global Styles
 html,
 body {
   background: #1f2122;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body .page-content {
@@ -152,8 +219,8 @@ p {
 }
 
 .templatemo-item {
-	max-width: 80px; 
-	border-radius: 23px;
+  max-width: 80px;
+  border-radius: 23px;
 }
 
 .main-button a {
@@ -166,7 +233,7 @@ p {
   font-weight: 400;
   text-transform: capitalize;
   letter-spacing: 0.5px;
-  transition: all .3s;
+  transition: all 0.3s;
   position: relative;
   overflow: hidden;
 }
@@ -187,7 +254,7 @@ p {
   font-weight: 400;
   text-transform: capitalize;
   letter-spacing: 0.5px;
-  transition: all .3s;
+  transition: all 0.3s;
   position: relative;
   overflow: hidden;
 }
@@ -203,7 +270,7 @@ p {
   color: #666;
 }
 
-.border-no-active a:hover{
+.border-no-active a:hover {
   border-color: #666;
   color: #666;
   background-color: transparent;
@@ -238,7 +305,7 @@ Pre-loader Style
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.99);
+  background-color: rgba(0, 0, 0, 0.99);
   display: -webkit-box;
   display: flex;
   -webkit-box-align: center;
@@ -260,29 +327,29 @@ Pre-loader Style
 
 @-webkit-keyframes dot {
   50% {
-      -webkit-transform: translateX(96px);
-      transform: translateX(96px);
+    -webkit-transform: translateX(96px);
+    transform: translateX(96px);
   }
 }
 
 @keyframes dot {
   50% {
-      -webkit-transform: translateX(96px);
-      transform: translateX(96px);
+    -webkit-transform: translateX(96px);
+    transform: translateX(96px);
   }
 }
 
 @-webkit-keyframes dots {
   50% {
-      -webkit-transform: translateX(-31px);
-      transform: translateX(-31px);
+    -webkit-transform: translateX(-31px);
+    transform: translateX(-31px);
   }
 }
 
 @keyframes dots {
   50% {
-      -webkit-transform: translateX(-31px);
-      transform: translateX(-31px);
+    -webkit-transform: translateX(-31px);
+    transform: translateX(-31px);
   }
 }
 
@@ -326,8 +393,6 @@ Pre-loader Style
   border-radius: 50%;
 }
 
-
-
 /* 
 ---------------------------------------------
 Header Style
@@ -336,16 +401,16 @@ Header Style
 
 .background-header {
   background-color: #fff !important;
-  height: 70px!important;
-  position: fixed!important;
-  top: 0!important;
+  height: 70px !important;
+  position: fixed !important;
+  top: 0 !important;
   left: 0;
   right: 0;
-  box-shadow: 0px 0px 10px rgba(0,0,0,0.15)!important;
-  -webkit-transition: all .5s ease 0s;
-  -moz-transition: all .5s ease 0s;
-  -o-transition: all .5s ease 0s;
-  transition: all .5s ease 0s;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.15) !important;
+  -webkit-transition: all 0.5s ease 0s;
+  -moz-transition: all 0.5s ease 0s;
+  -o-transition: all 0.5s ease 0s;
+  transition: all 0.5s ease 0s;
   display: none;
 }
 
@@ -357,10 +422,10 @@ Header Style
   left: 0;
   right: 0;
   z-index: 100;
-  -webkit-transition: all .5s ease 0s;
-  -moz-transition: all .5s ease 0s;
-  -o-transition: all .5s ease 0s;
-  transition: all .5s ease 0s;
+  -webkit-transition: all 0.5s ease 0s;
+  -moz-transition: all 0.5s ease 0s;
+  -o-transition: all 0.5s ease 0s;
+  transition: all 0.5s ease 0s;
 }
 
 .header-area .main-nav {
@@ -457,7 +522,7 @@ Header Style
   border: transparent;
   padding: 13px 10px;
   border-radius: 18px;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
 }
 
 .header-area .main-nav .nav li:last-child a {
@@ -662,7 +727,7 @@ Header Style
   }
   .header-area.header-sticky .nav li a:hover,
   .header-area.header-sticky .nav li a.active {
-    color: #e75e8d!important;
+    color: #e75e8d !important;
     opacity: 1;
   }
   .header-area.header-sticky .nav li.search-icon a {
@@ -724,7 +789,7 @@ Header Style
   }
   .header-area .main-nav .nav li a:hover {
     background: #fff !important;
-    color: #e75e8d!important;
+    color: #e75e8d !important;
   }
   .header-area .main-nav .nav li:last-child a img {
     display: none;
@@ -756,12 +821,13 @@ Header Style
     height: auto;
   }
   .header-area .main-nav .nav li.has-sub:after {
-    color: #3B566E;
+    color: #3b566e;
     right: 30px;
     font-size: 14px;
     top: 15px;
   }
-  .header-area .main-nav .nav li.submenu:hover ul, .header-area .main-nav .nav li.submenu:focus ul {
+  .header-area .main-nav .nav li.submenu:hover ul,
+  .header-area .main-nav .nav li.submenu:focus ul {
     height: 0px;
   }
 }
@@ -828,6 +894,8 @@ Most Popular Style
 
 .most-popular .item img {
   border-radius: 23px;
+  height: 130px;
+  width: 100%;
 }
 
 .most-popular .item h4 {
@@ -835,6 +903,10 @@ Most Popular Style
   margin-top: 20px;
   margin-bottom: 0px;
   display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .most-popular .item span {
@@ -845,14 +917,16 @@ Most Popular Style
 }
 
 .most-popular .item ul {
-  float: right;
-  margin-top: 20px;
+  float: none;
+  margin-top: 5px;
 }
 
 .most-popular .item ul li {
   text-align: right;
   color: #fff;
   font-size: 14px;
+  display: inline;
+  padding: 0 10px;
 }
 
 .most-popular .item ul li:first-child i {
@@ -949,7 +1023,7 @@ footer p {
 
 footer p a {
   color: #fff;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 footer p a:hover {
@@ -980,7 +1054,7 @@ Featured Games Style
   width: 100%;
   opacity: 0;
   visibility: hidden;
-  transition: all .4s;
+  transition: all 0.4s;
 }
 
 .featured-games .item .thumb:hover .hover-effect {
@@ -990,7 +1064,7 @@ Featured Games Style
 }
 
 .featured-games .item .thumb .hover-effect h6 {
-  background-color: rgba(31,33,34,0.95);
+  background-color: rgba(31, 33, 34, 0.95);
   display: inline-block;
   color: #ec6090;
   font-weight: 600;
@@ -1052,12 +1126,12 @@ Featured Games Style
 }
 
 .featured-games .owl-nav .owl-prev span,
-.featured-games .owl-nav .owl-next span  {
+.featured-games .owl-nav .owl-next span {
   font-size: 36px;
   display: inline-block;
   color: #666;
   opacity: 1;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .featured-games .owl-nav .owl-prev span:hover,
@@ -1124,7 +1198,7 @@ Featured Games Style
   padding-bottom: 28px;
 }
 
-.top-downloaded .text-button  {
+.top-downloaded .text-button {
   text-align: center;
 }
 
@@ -1188,7 +1262,7 @@ Live Stream Style
 }
 
 .live-stream .thumb img {
-  border-radius: 23px; 
+  border-radius: 23px;
 }
 
 .live-stream .thumb:hover .hover-effect {
@@ -1199,10 +1273,10 @@ Live Stream Style
 .live-stream .hover-effect {
   opacity: 0;
   visibility: hidden;
-  transition: all .4s;
+  transition: all 0.4s;
 }
 
-.live-stream .hover-effect .live a { 
+.live-stream .hover-effect .live a {
   position: absolute;
   background-color: rgba(236, 96, 144, 0.9);
   padding: 5px 10px;
@@ -1277,7 +1351,7 @@ Featured Banner Style
   position: relative;
   max-height: 305px;
   overflow: hidden;
-  border-radius: 23px;;
+  border-radius: 23px;
 }
 
 .feature-banner .thumb a {
@@ -1326,8 +1400,12 @@ Game Details Style
 }
 
 .game-details .content .left-info h4 {
-  font-size: 15px;
-  display: block;
+  font-size: 25px;
+  display: inline;
+}
+
+#product-price {
+  font-size: 25px;
 }
 
 .game-details .content .left-info span {
@@ -1377,7 +1455,7 @@ Game Details Style
 
 .game-details .content .right-info ul li:first-child i {
   color: yellow;
-} 
+}
 
 .game-details .content .right-info ul li i {
   color: #ec6090;
@@ -1390,7 +1468,7 @@ Game Details Style
 .game-details .main-border-button a {
   text-align: center;
   width: 100%;
-} 
+}
 
 /* 
 ---------------------------------------------
@@ -1584,7 +1662,7 @@ Profile Style
   margin-top: 30px;
 }
 
-.clips .item  {
+.clips .item {
   border-radius: 23px;
   padding: 30px 15px;
   background-color: #27292a;
@@ -1598,17 +1676,17 @@ Profile Style
 
 .clips .item .thumb a {
   position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-23px, -23px);
-    width: 46px;
-    height: 46px;
-    background-color: #fff;
-    border-radius: 50%;
-    display: inline-block;
-    text-align: center;
-    line-height: 46px;
-    color: #ec6090;
+  left: 50%;
+  top: 50%;
+  transform: translate(-23px, -23px);
+  width: 46px;
+  height: 46px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  line-height: 46px;
+  color: #ec6090;
 }
 
 .clips .item h4 {
@@ -1692,7 +1770,7 @@ body {
 
 @media (max-width: 992px) {
   .background-header {
-  display: inline-block;
+    display: inline-block;
   }
   .header-area .main-nav #search {
     display: none;

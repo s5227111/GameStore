@@ -251,8 +251,6 @@ class GameCollectionQuery:
         else:
             filters = {
                 "tags": {"$in": [tag]},
-                "developer": developer,
-                "game_id": game_id,
             }
 
         collection = mongo.cx["Catalog"]["games"]
