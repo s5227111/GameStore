@@ -8,6 +8,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from typing import Union
 
+from marshmallow import ValidationError
+
 # Instantiate db manager
 pymysql.install_as_MySQLdb()
 db = SQLAlchemy()
@@ -290,3 +292,65 @@ class UserQuery:
         )
 
         return query
+
+    @staticmethod
+    def update_login_data(user_id: int, data: dict) -> None:
+
+        user = UserQuery.get_user_by_id(user_id)
+
+        for k, v in data.items():
+            # check if email is the one to be updadted
+            if k == "email":
+                # check if email is already in the database
+                if UserQuery.get_user_by_email(v):
+                    raise ValidationError("Email already in use")
+
+            elif k == "username":
+                if UserQuery.get_user_by_username(v):
+                    raise ValidationError("Username already in use")
+
+            elif k == "password":
+                # check if password is the same that is registered
+                if not user.check_password_hash(v):
+                    raise ValidationError("Password is not correct")
+
+            # update the user data
+            setattr(user, k, v)
+
+        db.session.commit()
+
+    @staticmethod
+    def update_personal_data(user_id: int, data: dict) -> None:
+        # Update the user personal data, data need to be validated before
+
+        user = UserQuery.get_user_by_id(user_id)
+
+        for k, v in data.items():
+            # update the user data
+            setattr(user, k, v)
+
+        db.session.commit()
+
+    @staticmethod
+    def update_contact_data(user_id: int, data: dict) -> None:
+        # Update the user contact data
+
+        user = UserQuery.get_user_by_id(user_id)
+
+        for k, v in data.items():
+            # update the user data
+            setattr(user, k, v)
+
+        db.session.commit()
+
+    @staticmethod
+    def update_address_data(user_id: int, data: dict) -> None:
+        # Update the user address data
+
+        user = UserQuery.get_user_by_id(user_id)
+
+        for k, v in data.items():
+            # update the user data
+            setattr(user, k, v)
+
+        db.session.commit()
