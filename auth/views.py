@@ -36,11 +36,6 @@ def configure(app):
     app.config["SECRET_KEY"] = "p'e5'7phBEdm3g]jHdtS"
 
 
-@auth_bp.route("/")
-def home():
-    return render_template("auth/home.html")
-
-
 # Login Routes
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
@@ -252,15 +247,99 @@ def forgot_password():
     return render_template("auth/forgot_password.html")
 
 
-@auth_bp.route("/user-profile", methods=["GET"])
+@auth_bp.route("/profile", methods=["GET"])
 @login_required
-def user_profile():
+def profile():
     # IMPLEMENT USER PROFILE PAGE
-    user = UserQuery.get_user_by_id(current_user.id)
+    return render_template("auth/profile.html")
 
-    user_data = user.to_dict()
 
-    return user_data
+@auth_bp.route("/edit-profile", methods=["POST", "GET"])
+@login_required
+def edit_profile():
+    # IMPLEMENT USER PROFILE PAGE
+
+    current_user_data = UserQuery.get_user_by_id(current_user.id).to_dict()
+
+    msgs = []
+
+    if request.method == "POST":
+        # UPDATE USER DATA
+        data = request.form.to_dict()
+        data = {k: v for k, v in data.items() if v}  # Remove empty values
+
+        login_fields = ["username", "email", "password"]
+        personal_data_fields = ["first_name", "last_name", "dob"]
+        contact_fields = ["phone", "mobile"]
+        address_fields = ["address_1", "address_2", "town_city", "county", "postcode"]
+
+        # Verify if the user is trying to update login data
+        if any(field in data for field in login_fields):
+
+            try:
+                UserQuery.update_login_data(current_user.id, data)
+                return redirect(url_for("auth.profile"))
+
+            except ValidationError as err:
+                msgs.append(err.messages)
+
+            return render_template(
+                template_name_or_list="auth/edit_profile.html",
+                msgs=msgs,
+                current_user_data=current_user_data,
+            )
+
+        # Verify if the user is trying to update personal data
+        if any(field in data for field in personal_data_fields):
+
+            try:
+                UserQuery.update_personal_data(current_user.id, data)
+                return redirect(url_for("auth.profile"))
+
+            except ValidationError as err:
+                msgs.append(err.messages)
+
+            return render_template(
+                template_name_or_list="auth/edit_profile.html",
+                msgs=msgs,
+                current_user_data=current_user_data,
+            )
+
+        # Verify if the user is trying to update contact data
+        if any(field in data for field in contact_fields):
+
+            try:
+                UserQuery.update_contact_data(current_user.id, data)
+                return redirect(url_for("auth.profile"))
+
+            except ValidationError as err:
+                msgs.append(err.messages)
+
+            return render_template(
+                template_name_or_list="auth/edit_profile.html",
+                msgs=msgs,
+                current_user_data=current_user_data,
+            )
+
+        # Verify if the user is trying to update address data
+        if any(field in data for field in address_fields):
+
+            try:
+                UserQuery.update_address_data(current_user.id, data)
+                return redirect(url_for("auth.profile"))
+
+            except ValidationError as err:
+                msgs.append(err.messages)
+
+            return render_template(
+                template_name_or_list="auth/edit_profile.html",
+                msgs=msgs,
+                current_user_data=current_user_data,
+            )
+
+    return render_template(
+        "auth/edit_profile.html", current_user_data=current_user_data, msgs=msgs
+    )
 
 
 # Error handlers

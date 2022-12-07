@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <title>GameStore - {{current_user.username}} profile</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet"
+        href="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/css/bootstrap.min.css')}}">
+
+
+
+    <!-- Additional CSS Files -->
+
+    <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/fontawesome.css')}}">
+    <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/templatemo-cyborg-gaming.css')}}">
+    <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/owl.css')}}">
+    <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/animate.css')}}">
+    <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/templatemo-cyborg-gaming.css')}}">
+    <link rel="stylesheet" href="{{url_for('auth.static', filename='auth/css/edit-data.css')}}">
+    <!--
+
+-->
+</head>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="{{url_for('catalog.home')}}" class="logo">
+                            <img src="{{url_for('catalog.static', filename='catalog/images/' )}}logo.png" alt="">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Search End ***** -->
+                        <div class="search-input">
+                            <form id="search" action="#">
+                                <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword"
+                                    onkeypress="handle" />
+                                <i class="fa fa-search"></i>
+                            </form>
+                        </div>
+                        <!-- ***** Search End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="{{url_for('catalog.home')}}" class="active">Home</a></li>
+                            <li><a href="{{url_for('catalog.browse')}}">Browse</a></li>
+                            <li><a href="{{url_for('catalog.streams')}}">Streams</a></li>
+
+                            {% if current_user.is_authenticated %}
+                            <li><a href="{{url_for('auth.profile')}}">Profile <img
+                                        src="{{url_for('catalog.static', filename='catalog/images/' )}}profile-header.jpg"
+                                        alt=""></a>
+                                {% else %}
+                            <li><a href="{{url_for('auth.login_page')}}">Login</a></li>
+                            {% endif %}
+                            </li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="page-content">
+
+                    <!-- ****** User image starts here ****** -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="main-profile">
+                                <!-- ****** Login data Form Starts Here -->
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <img src="https://cdn.dribbble.com/users/5534/screenshots/14230133/media/e2f853f8232acad78bf143c32f2f3a04.jpg?compress=1&resize=400x300"
+                                            alt="" class="rounded">
+                                        <ul>
+                                            <li>
+                                                joined {{current_user_data.joined_at}}
+                                            </li>
+                                            <li>
+                                                <a href="{{url_for('auth.profile')}}">View Profile</a>
+                                            </li>
+                                            {% if current_user_data.is_email_verified %}
+                                            <li>
+                                                email verified: <span class="verified">yes</span>
+                                            </li>
+                                            {% else %}
+                                            <li>
+                                                email verified: <span class="not-verified">no</span>
+                                            </li>
+                                            {% endif %}
+
+                                        </ul>
+
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="main-info header-text">
+                                            <div class="form-header">
+                                                <h4 class="form-title">Login details</h4>
+                                            </div>
+
+                                            <form action="#" method="post">
+                                                <div class="form-group">
+                                                    <label for="username" class="form-label">username</label>
+                                                    <input type="text" id="username" name="username"
+                                                        placeholder="{{current_user.username}}"
+                                                        class="form-control form-input" autocomplete="off">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="email" class="form-label">email</label>
+                                                    <input type="email" id="email" name="email"
+                                                        placeholder="{{current_user.email}}"
+                                                        class="form-control form-input" autocomplete="off">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="password" class="form-label">Password</label>
+                                                    <input type="password" id="password" name="password"
+                                                        placeholder="strong password" class="form-control form-input"
+                                                        autocomplete="off">
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-10">
+                                                        <button type="submit" class="main-button">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            {% for msg in msgs %}
+                                            <div class="alert alert-danger" role="alert">
+                                                {{msg}}
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <!-- ****** Login data Form Ends Here -->
+                                <!-- ***** Personal Data Form Start Here -->
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="personal-data">
+                                            <div class="heading-section align-items-center">
+                                                <h4>
+                                                    Your <em>Personal Details</em>
+                                                </h4>
+                                            </div>
+                                            <div class="col-lg-9 container">
+                                                <form method="post" action="#">
+                                                    <div class="form-row align-items-center">
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="first_name" class="form-label">First
+                                                                name</label>
+                                                            <input type="text" class="form-input form-control"
+                                                                id="first_name" placeholder="First Name"
+                                                                value="{{current_user_data.first_name}}"
+                                                                name="first_name">
+                                                        </div>
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="last_name" class="form-label">Last name</label>
+                                                            <input type="text" class="form-input form-control"
+                                                                id="last_name" placeholder="Last Name"
+                                                                value="{{current_user_data.last_name}}"
+                                                                name="last_name">
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="form-row align-items-center">
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="birth_date" class="form-label">Birth
+                                                                Date</label>
+                                                            <input type="date" class="form-input form-control"
+                                                                id="birth_date" placeholder="Birth Date"
+                                                                value="12/12/2012">
+                                                        </div>
+                                                    </div>
+                                                    <div class="heading-section">
+                                                        <h4>
+                                                            Contact & <em>Address</em>
+                                                        </h4>
+                                                    </div>
+                                                    <div class="form-row align-items-center">
+
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="phone" class="form-label">Phone</label>
+                                                            <input type="text" class="form-input form-control"
+                                                                id="phone" placeholder="Phone"
+                                                                value="{{current_user_data.phone}}">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-row align-items-center">
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="address_1" class="form-label">Address 1</label>
+                                                            <input type="text" class="form-input form-control"
+                                                                id="address_1" placeholder="Address 1"
+                                                                value="{{current_user_data.address_1}}">
+                                                        </div>
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="address_2" class="form-label">Address 2</label>
+                                                            <input type="text" class="form-input form-control"
+                                                                id="address_2" placeholder="Address 2"
+                                                                value="{{current_user_data.address_2}}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row align-items-center">
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="town_city" class="form-label">Town/ City</label>
+                                                            <input type="text" class="form-input form-control"
+                                                                id="town_city" placeholder="Town/ City"
+                                                                value="{{current_user_data.town_city}}">
+                                                        </div>
+                                                        <div class="col-sm-5 my-1">
+                                                            <label for="postcode" class="form-label">Postcode</label>
+                                                            <input type="text" class="form-input form-control"
+                                                                id="postcode" placeholder="Postcode"
+                                                                value="{{current_user_data.postcode}}">
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <button type="submit" class="main-button"
+                                                            id="form-button">Save</button>
+                                                    </div>
+                                                </form>
+                                                {% if updated_status == 'ok' %}
+                                                <div class="alert alert-success" role="alert">
+                                                    <strong>Success!</strong> Your data has been updated.
+                                                    {% elif updated_status == 'empty'%}
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <strong>Error!</strong> You have to fill some filed.
+                                                        {% elif updated_status == 'error'%}
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong>Error!</strong> Something went wrong.
+                                                            {% endif %}
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- ****** User image ends here ****** -->
+
+                                <div class="row">
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <p>Copyright © 2036 <a href="#">Cyborg Gaming</a> Company. All rights reserved.
+
+                                    <br>Design: <a href="https://templatemo.com" target="_blank"
+                                        title="free CSS templates">TemplateMo</a> Distributed
+                                    By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+
+                <script src="{{url_for('catalog.static', filename='catalog/vendor/jquary/jquary.min.js')}}"></script>
+                <script
+                    src="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+
+                <!-- Plugin JavaScript -->
+                <script src="{{url_for('catalog.static', filename='catalog/js/isotope.min.js')}}"></script>
+                <script src="{{url_for('catalog.static', filename='catalog/js/owl-carousel.js')}}"></script>
+                <script src="{{url_for('catalog.static', filename='catalog/js/tabs.js')}}"></script>
+                <script src="{{url_for('catalog.static', filename='catalog/js/popup.js')}}"></script>
+                <script src="{{url_for('catalog.static', filename='catalog/js/custom.js')}}"></script>
+                <script src="{{url_for('auth.static', filename='auth/scripts/edit-data.js')}}"></script>
+</body>
+
+</html>

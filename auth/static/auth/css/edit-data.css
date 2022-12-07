@@ -1,0 +1,153 @@
+.col-lg-4 ul {
+  margin-top: 20px;
+}
+
+form {
+  width: 100%;
+}
+
+.form-header {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.form-title {
+  margin: 0 auto;
+  color: #ec6090;
+  font-size: 30px;
+  margin-bottom: 30px;
+  text-decoration: none;
+}
+
+.form-group {
+  width: 75%;
+  margin-left: 35px;
+  padding: 20px 0;
+}
+
+.from-control {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.form-input {
+  background-color: #27292a;
+  height: 46px;
+  border-radius: 23px;
+  border: none;
+  color: #666;
+  font-size: 14px;
+  padding: 0px 15px 0px 45px;
+  display: block;
+}
+
+.form-input:active,
+.form-input:focus {
+  border: none;
+  background-color: #27292a;
+  color: #fff;
+}
+
+.form-label {
+  color: #666;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.form:nth-child(1) {
+  align-items: center;
+}
+
+.col-sm-10 {
+  display: flex;
+}
+
+.col-sm-10 > button {
+  margin: 0 auto;
+}
+
+.main-button {
+  margin: 0 auto;
+  border: none;
+  font-size: 14px;
+  color: #fff;
+  background-color: #e75e8d;
+  padding: 12px 30px;
+  display: inline-block;
+  border-radius: 25px;
+  font-weight: 400;
+  text-transform: capitalize;
+  letter-spacing: 0.5;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-submit {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+}
+
+.main-button:hover,
+.form-submit:hover {
+  background-color: #fff;
+  color: #e75e8d;
+}
+
+/* Personal Data Starts Here */
+
+.heading-section {
+  display: flex;
+}
+
+.heading-section h4 {
+  padding: 30px 0;
+  margin: 0 auto;
+}
+
+.personal-data {
+  margin-top: 50px;
+  border-top: 2px solid #27292a;
+}
+
+.personal-data .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 0;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 auto;
+}
+
+.col-sm-3 .my-1 .personal-data {
+  display: inline;
+}
+
+.sub-header h4 {
+  color: #ec6090;
+  font-size: 30px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+  text-decoration: none;
+}
+
+.sub-header em {
+  color: #fff;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+#form-button {
+  width: auto !important;
+}

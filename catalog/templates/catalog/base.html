@@ -80,7 +80,7 @@ https://templatemo.com/tm-579-cyborg-gaming
 
                             {% if current_user.is_authenticated %}
 
-                            <li><a href="{{url_for('catalog.profile')}}">Profile <img
+                            <li><a href="{{url_for('auth.profile')}}">Profile <img
                                         src="{{url_for('catalog.static', filename='catalog/images')}}/profile-header.jpg"
                                         alt="" /></a>
                             </li>

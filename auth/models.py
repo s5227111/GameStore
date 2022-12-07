@@ -129,20 +129,21 @@ class Address(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    street = db.Column(db.String(100))
-    city = db.Column(db.String(100))
-    state = db.Column(db.String(100))
-    country = db.Column(db.String(100))
+
+    address_1 = db.Column(db.String(100))
+    address_2 = db.Column(db.String(100))
+    town_city = db.Column(db.String(100))
+    county = db.Column(db.String(100))
     postcode = db.Column(db.String(100))
 
     def to_dict(self):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "street": self.street,
-            "city": self.city,
-            "state": self.state,
-            "country": self.country,
+            "address_1": self.address_1,
+            "address_2": self.address_2,
+            "town_city": self.town_city,
+            "county": self.county,
             "postcode": self.postcode,
         }
 
