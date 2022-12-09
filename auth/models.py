@@ -298,24 +298,26 @@ class UserQuery:
 
         user = UserQuery.get_user_by_id(user_id)
 
-        for k, v in data.items():
-            # check if email is the one to be updadted
-            if k == "email":
-                # check if email is already in the database
-                if UserQuery.get_user_by_email(v):
-                    raise ValidationError("Email already in use")
+        # Check if pwd correct and remove from dict
+        if "password" in data:
+            if not user.check_password_hash(data["password"]):
+                raise ValidationError("Password is not correct")
 
-            elif k == "username":
-                if UserQuery.get_user_by_username(v):
-                    raise ValidationError("Username already in use")
+            del data["password"]
 
-            elif k == "password":
-                # check if password is the same that is registered
-                if not user.check_password_hash(v):
-                    raise ValidationError("Password is not correct")
+            for k, v in data.items():
+                # check if email is the one to be updadted
+                if k == "email":
+                    # check if email is already in the database
+                    if UserQuery.get_user_by_email(v):
+                        raise ValidationError("Email already in use")
 
-            # update the user data
-            setattr(user, k, v)
+                elif k == "username":
+                    if UserQuery.get_user_by_username(v):
+                        raise ValidationError("Username already in use")
+
+                # update the user data
+                setattr(user, k, v)
 
         db.session.commit()
 

@@ -278,7 +278,12 @@ def edit_profile():
 
             try:
                 UserQuery.update_login_data(current_user.id, data)
-                return redirect(url_for("auth.profile"))
+                msgs.append("Login data updated successfully")
+                return render_template(
+                    "auth/edit_profile.html",
+                    msgs=msgs,
+                    current_user_data=current_user_data,
+                )
 
             except ValidationError as err:
                 msgs.append(err.messages)

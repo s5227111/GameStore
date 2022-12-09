@@ -80,7 +80,7 @@ https://templatemo.com/tm-579-cyborg-gaming
 
               {% if current_user.is_authenticated %}
 
-              <li><a href="{{url_for('catalog.profile')}}">Profile <img
+              <li><a href="{{url_for('auth.profile')}}">Profile <img
                     src="{{url_for('catalog.static', filename='catalog/images')}}/profile-header.jpg" alt="" /></a>
               </li>
               {% else %}
@@ -115,12 +115,8 @@ https://templatemo.com/tm-579-cyborg-gaming
                   </div>
                   <div class="col-lg-4 align-self-center">
                     <div class="main-info header-text">
-                      <span>Offline</span>
-                      <h4>Alan Smithee</h4>
-                      <p>You Haven't Gone Live yet. Go Live By Touching The Button Below.</p>
-                      <div class="main-border-button">
-                        <a href="#">Start Live Stream</a>
-                      </div>
+                      <h4>{{current_user.username}}</h4>
+                      <p>{{current_user.email}}</p>
                     </div>
                   </div>
                   <div class="col-lg-4 align-self-center">
