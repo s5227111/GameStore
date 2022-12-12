@@ -1,314 +1,200 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'catalog/base.html' %}
+{% block title %}GameStore - {{current_user.username}}{% endblock %}
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-    rel="stylesheet" />
-
-  <link rel="icon" type="image/x-icon" href="{{url_for ('catalog.static', filename='catalog/images/logo.png')}}">
-  <title>{% block title %}{% endblock %}</title>
-
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-  <link rel="stylesheet"
-    href="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/css/bootstrap.min.css')}}" />
-
-  <!-- Additional CSS Files -->
-
-  <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/fontawesome.css')}}" />
-  <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/templatemo-cyborg-gaming.css')}}" />
-  <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/owl.css')}}" />
-  <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/animate.css')}}" />
-  <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/swiper-bundle.min.css')}}" />
-
-  <!--
-
-TemplateMo 579 Cyborg Gaming
-
-https://templatemo.com/tm-579-cyborg-gaming
-
--->
-
-  {% block heading %}
-  {% endblock %}
-
-</head>
-
-<body>
-
-  <!-- ***** Preloader Start ***** -->
-  <div id="js-preloader" class="js-preloader">
-    <div class="preloader-inner">
-      <span class="dot"></span>
-      <div class="dots">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    </div>
-  </div>
-  <!-- ***** Preloader End ***** -->
-
-  <!-- ***** Header Area Start ***** -->
-  <header class="header-area header-sticky">
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <nav class="main-nav">
-            <!-- ***** Logo Start ***** -->
-            <a href="index.html" class="logo">
-              <img src="{{url_for('catalog.static', filename='catalog/images')}}/logo.png" alt="" />
-            </a>
-            <!-- ***** Logo End ***** -->
-            <!-- ***** Search End ***** -->
-            <div class="search-input">
-              <form id="search" action="#">
-                <input type="text" placeholder="Type Something" id="searchText" name="searchKeyword"
-                  onkeypress="handle" />
-                <i class="fa fa-search"></i>
-              </form>
+{% block style %}
+<link rel="stylesheet" href="{{url_for('auth.static', filename='auth/css/auth.css')}}">
+{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="page-content">
+        {% if current_user.personal_data.check_if_empty() %}
+        <!-- *** user profile are not finished warning *** -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-warning" role="alert">
+              <h4 class="alert-heading">User profile is not finished!</h4>
+              <p>It looks like you haven't finalized your profile. To take advantage of all the tools on the site, add your personal information by <a
+                  href="{{url_for('auth.edit_profile')}}">clicking here</a></p>
+              <hr>
             </div>
-            <!-- ***** Search End ***** -->
-            <!-- ***** Menu Start ***** -->
-            <ul class="nav">
-              <li><a href="{{url_for('catalog.home')}}" class="active">Home</a></li>
-              <li><a href="{{url_for('catalog.browse')}}">Browse</a></li>
-              <li><a href="{{url_for('catalog.streams')}}">Streams</a></li>
-
-              {% if current_user.is_authenticated %}
-
-              <li><a href="{{url_for('auth.profile')}}">Profile <img
-                    src="{{url_for('catalog.static', filename='catalog/images')}}/profile-header.jpg" alt="" /></a>
-              </li>
-              {% else %}
-              <li><a href="{{url_for('auth.login')}}">Login </a>
-              </li>
-              {% endif %}
-
-            </ul>
-            <a class="menu-trigger">
-              <span>Menu</span>
-            </a>
-            <!-- ***** Menu End ***** -->
-          </nav>
+          </div>
         </div>
-      </div>
-    </div>
-  </header>
-  <!-- ***** Header Area End ***** -->
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="page-content">
-
-          <!-- ***** Banner Start ***** -->
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="main-profile ">
-                <div class="row">
-                  <div class="col-lg-4">
-                    <img src="assets/images/profile.jpg" alt="" style="border-radius: 23px;">
-                  </div>
-                  <div class="col-lg-4 align-self-center">
-                    <div class="main-info header-text">
-                      <h4>{{current_user.username}}</h4>
-                      <p>{{current_user.email}}</p>
-                    </div>
-                  </div>
-                  <div class="col-lg-4 align-self-center">
-                    <ul>
-                      <li>Games Downloaded <span>3</span></li>
-                      <li>Friends Online <span>16</span></li>
-                      <li>Live Streams <span>None</span></li>
-                      <li>Clips <span>29</span></li>
-                    </ul>
-                  </div>
+        <!-- *** user profile are not finished warning ends ***-->
+        {% endif %}
+        <!-- ***** Banner Start ***** -->
+        <div class=" row">
+          <div class="col-lg-12">
+            <div class="main-profile ">
+              <div class="row">
+                <!-- TODO: Store user images or provide some choice options. Currently, all users have the same image.  -->
+                <div class="col-lg-4">
+                  <img
+                    src="https://cdn.dribbble.com/users/5534/screenshots/14230133/media/e2f853f8232acad78bf143c32f2f3a04.jpg?compress=1&resize=400x300"
+                    alt="" style="border-radius: 23px;">
                 </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="clips">
-                      <div class="row">
-                        <div class="col-lg-12">
-                          <div class="heading-section">
-                            <h4><em>Your Most Popular</em> Clips</h4>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="item">
-                            <div class="thumb">
-                              <img src="assets/images/clip-01.jpg" alt="" style="border-radius: 23px;">
-                              <a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank"><i
-                                  class="fa fa-play"></i></a>
-                            </div>
-                            <div class="down-content">
-                              <h4>First Clip</h4>
-                              <span><i class="fa fa-eye"></i> 250</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="item">
-                            <div class="thumb">
-                              <img src="assets/images/clip-02.jpg" alt="" style="border-radius: 23px;">
-                              <a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank"><i
-                                  class="fa fa-play"></i></a>
-                            </div>
-                            <div class="down-content">
-                              <h4>Second Clip</h4>
-                              <span><i class="fa fa-eye"></i> 183</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="item">
-                            <div class="thumb">
-                              <img src="assets/images/clip-03.jpg" alt="" style="border-radius: 23px;">
-                              <a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank"><i
-                                  class="fa fa-play"></i></a>
-                            </div>
-                            <div class="down-content">
-                              <h4>Third Clip</h4>
-                              <span><i class="fa fa-eye"></i> 141</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                          <div class="item">
-                            <div class="thumb">
-                              <img src="assets/images/clip-04.jpg" alt="" style="border-radius: 23px;">
-                              <a href="https://www.youtube.com/watch?v=r1b03uKWk_M" target="_blank"><i
-                                  class="fa fa-play"></i></a>
-                            </div>
-                            <div class="down-content">
-                              <h4>Fourth Clip</h4>
-                              <span><i class="fa fa-eye"></i> 91</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-lg-12">
-                          <div class="main-button">
-                            <a href="#">Load More Clips</a>
-                          </div>
-                        </div>
+                <div class="col-lg-4 align-self-center">
+                  <div class="main-info header-text">
+                    <h4>{{current_user.username}}</h4>
+                    <div class="row">
+                      <div class="col">
+                        <p>{{current_user.personal_data.first_name}}</p>
+                      </div>
+                      <div class="col">
+                        <p>{{current_user.personal_data.last_name}}</p>
                       </div>
                     </div>
+                    <p>{{current_user.email}}</p>
+                    <a href="{{url_for('auth.edit_profile')}}">
+                      <i class="fa-solid fa-pen-to-square"></i>Edit profile data
+                    </a>
+                  </div>
+                </div>
+                <div class="col-lg-4 align-self-center">
+                  <ul>
+                    <li>Games in account<span>{{current_user.my_games|length}}</span></li>
+                    <li>Games in cart<span>{{current_user.user_cart|length}}</span></li>
+                    <li>rated games<span>{{current_user.upvotes|length}}</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="clips">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="heading-section">
+                          <h4><em>Your games in </em> cart</h4>
+                        </div>
+                      </div>
+                      {% if user_cart %}
+                      {% for game in user_cart %}
+                      <div class="col-lg-3 col-sm-6">
+                        <div class="item">
+                          <div class="thumb">
+                            <img src="{{game['images']['thumb_image']}}" alt="" style="border-radius: 23px;">
+                            <a href="{{url_for('catalog.add_to_my_games', game_id=game.game_id)}}"><i class="fa-solid fa-circle-plus fa-2x"></i></a>
+                          </div>
+                          <div class="down-content">
+                            <h4>{{game.name}}</h4>
+                            <span><i class="fa-solid fa-dollar-sign"></i> {{game.pricing}}</span>
+                            <span><i class="fa fa-download"></i>{{game.downloads}}</li></span>
+                          </div>
+                        </div>
+                        <div class="col-sm-12 remove-cart">
+                          <a href="{{url_for('catalog.remove_from_my_cart', game_id=game.game_id, landing_from='profile')}}"><i
+                              class="fa-solid fa-circle-xmark"></i></a>
+                        </div>
+                      </div>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="col-lg-12">
+                      <div class="alert alert-warning" role="alert">
+                        <h4 class="alert-heading">Your cart is empty!</h4>
+                        <p>It looks like you haven't added any games to your cart. To take advantage of all the tools on the site, add games to your
+                          cart by <a href="{{url_for('catalog.home')}}">clicking here</a></p>
+                        <hr>
+                      </div>
+                    </div>
+                    {% endif %}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <!-- ***** Banner End ***** -->
+        </div>
+        <!-- ***** Banner End ***** -->
 
-          <!-- ***** Gaming Library Start ***** -->
-          <div class="gaming-library profile-library">
+        <!-- ***** Gaming Library Start ***** -->
+        <div class="gaming-library profile-library">
+          <div class="col-lg-12">
+            <div class="heading-section">
+              <h4><em>Your Gaming</em> Library</h4>
+            </div>
+            {% for game_index in range(user_games|length) %}
+            <div class="item">
+              <ul>
+                <li><img src="{{user_games[game_index]['images']['thumb_image']}}" alt="" class="templatemo-item"></li>
+                <li>
+                  <h4>{{user_games[game_index]['name']}}</h4><span>{{user_games[game_index]['tags'][0]}}</span>
+                </li>
+                <li>
+                  <h4>Date Added</h4><span>{{current_user.my_games[game_index].added_at}}</span>
+                </li>
+                {% if current_user.my_games[game_index].is_downloaded %}
+                <li>
+                  <h4>Currently Downloaded</h4><span>Yes</span>
+                </li>
+                <li>
+                  <div class="main-border-button border-no-active"><a href="#">Donwloaded</a></div>
+                </li>
+                {% else %}
+                <li>
+                  <h4>Currently Downloaded</h4><span>No</span>
+                </li>
+                <li>
+                  <div class="main-border-button"><a href="#">Download</a></div>
+                </li>
+                {% endif %}
+              </ul>
+            </div>
+            {% endfor %}
+            {% if not current_user.my_games %}
             <div class="col-lg-12">
-              <div class="heading-section">
-                <h4><em>Your Gaming</em> Library</h4>
-              </div>
-              <div class="item">
-                <ul>
-                  <li><img src="assets/images/game-01.jpg" alt="" class="templatemo-item"></li>
-                  <li>
-                    <h4>Dota 2</h4><span>Sandbox</span>
-                  </li>
-                  <li>
-                    <h4>Date Added</h4><span>24/08/2036</span>
-                  </li>
-                  <li>
-                    <h4>Hours Played</h4><span>634 H 22 Mins</span>
-                  </li>
-                  <li>
-                    <h4>Currently</h4><span>Downloaded</span>
-                  </li>
-                  <li>
-                    <div class="main-border-button border-no-active"><a href="#">Donwloaded</a></div>
-                  </li>
-                </ul>
-              </div>
-              <div class="item">
-                <ul>
-                  <li><img src="assets/images/game-02.jpg" alt="" class="templatemo-item"></li>
-                  <li>
-                    <h4>Fortnite</h4><span>Sandbox</span>
-                  </li>
-                  <li>
-                    <h4>Date Added</h4><span>22/06/2036</span>
-                  </li>
-                  <li>
-                    <h4>Hours Played</h4><span>745 H 22 Mins</span>
-                  </li>
-                  <li>
-                    <h4>Currently</h4><span>Downloaded</span>
-                  </li>
-                  <li>
-                    <div class="main-border-button border-no-active"><a href="#">Donwloaded</a></div>
-                  </li>
-                </ul>
-              </div>
-              <div class="item last-item">
-                <ul>
-                  <li><img src="assets/images/game-03.jpg" alt="" class="templatemo-item"></li>
-                  <li>
-                    <h4>CS-GO</h4><span>Sandbox</span>
-                  </li>
-                  <li>
-                    <h4>Date Added</h4><span>21/04/2022</span>
-                  </li>
-                  <li>
-                    <h4>Hours Played</h4><span>632 H 46 Mins</span>
-                  </li>
-                  <li>
-                    <h4>Currently</h4><span>Downloaded</span>
-                  </li>
-                  <li>
-                    <div class="main-border-button border-no-active"><a href="#">Donwloaded</a></div>
-                  </li>
-                </ul>
+              <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading">Your library is empty!</h4>
+                <p>It looks like you haven't added any games to your library. To take advantage of all the tools on the site, add games to your
+                  library by <a href="{{url_for('catalog.home')}}">clicking here</a></p>
+                <hr>
               </div>
             </div>
+            <!-- ***** Gaming Library End ***** -->
+            {% endif %}
           </div>
-          <!-- ***** Gaming Library End ***** -->
+        </div>
+        <!-- ***** Products history starts ****** -->
+        <div class="clips gaming-library products-history">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="heading-section">
+                <h4><em>Your</em> Products History</h4>
+              </div>
+            </div>
+            <div class="row">
+              {% if user_history %}
+              {% for game in user_history %}
+              <div class="col-lg-3 col-sm-6">
+                <div class="item">
+                  <div class="thumb">
+                    <img src="{{game['images']['thumb_image']}}" alt="" style="border-radius: 23px;">
+                  </div>
+                  <div class="down-content">
+                    <a href="{{url_for('catalog.details', game_id=game.game_id)}}">
+                      <h4>{{game.name}}</h4>
+                      <span><i class="fa-solid fa-dollar-sign"></i> {{game.pricing}}</span>
+                      <span><i class="fa fa-download"></i>{{game.downloads}}</li></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% else %}
+          <div class="col-lg-12">
+            <div class="alert alert-warning" role="alert">
+              <h4 class="alert-heading">Your cart is empty!</h4>
+              <p>It looks like you haven't added any games to your cart. To take advantage of all the tools on the site, add games to your
+                cart by <a href="{{url_for('catalog.home')}}">clicking here</a></p>
+              <hr>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
+      {% endblock %}
     </div>
   </div>
-
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">Cyborg Gaming</a> Company. All rights reserved.
-
-            <br>Design: <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a>
-            Distributed By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-
-  <!-- Scripts -->
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-
-  <script src="{{url_for('catalog.static', filename='catalog/vendor/jquery/jquery.min.js')}}"></script>
-  <script src="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/bootstrap.min.js')}}"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="{{url_for('catalog.static', filename='catalog/js/isotope.min.js')}}"></script>
-  <script src="{{url_for('catalog.static', filename='catalog/js/owl-carousel.js')}}"></script>
-  <script src="{{url_for('catalog.static', filename='catalog/js/tabs.js')}}"></script>
-  <script src="{{url_for('catalog.static', filename='catalog/js/popup.js')}}"></script>
-  <script src="{{url_for('catalog.static', filename='catalog/js/custom.js')}}"></script>
-
-
-
-</body>
-
-</html>
+</div>

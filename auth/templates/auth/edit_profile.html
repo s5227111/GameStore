@@ -6,14 +6,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <title>GameStore - {{current_user.username}} profile</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet"
-        href="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/css/bootstrap.min.css')}}">
 
 
 
@@ -59,8 +57,7 @@
                         <!-- ***** Search End ***** -->
                         <div class="search-input">
                             <form id="search" action="#">
-                                <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword"
-                                    onkeypress="handle" />
+                                <input type="text" placeholder="Type Something" id='searchText' name="searchKeyword" onkeypress="handle" />
                                 <i class="fa fa-search"></i>
                             </form>
                         </div>
@@ -73,8 +70,7 @@
 
                             {% if current_user.is_authenticated %}
                             <li><a href="{{url_for('auth.profile')}}">Profile <img
-                                        src="{{url_for('catalog.static', filename='catalog/images/' )}}profile-header.jpg"
-                                        alt=""></a>
+                                        src="{{url_for('catalog.static', filename='catalog/images/' )}}profile-header.jpg" alt=""></a>
                                 {% else %}
                             <li><a href="{{url_for('auth.login_page')}}">Login</a></li>
                             {% endif %}
@@ -133,21 +129,19 @@
                                             <form action="#" method="post">
                                                 <div class="form-group">
                                                     <label for="username" class="form-label">username</label>
-                                                    <input type="text" id="username" name="username"
-                                                        placeholder="{{current_user.username}}"
+                                                    <input type="text" id="username" name="username" placeholder="{{current_user.username}}"
                                                         class="form-control form-input" autocomplete="off">
                                                 </div>
 
                                                 <div class="form-group">
                                                     <label for="email" class="form-label">email</label>
-                                                    <input type="email" id="email" name="email"
-                                                        placeholder="{{current_user.email}}"
+                                                    <input type="email" id="email" name="email" placeholder="{{current_user.email}}"
                                                         class="form-control form-input" autocomplete="off">
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="password" class="form-label">Password</label>
-                                                    <input type="password" id="password" name="password" placeholder=""
-                                                        required class="form-control form-input" autocomplete="off">
+                                                    <input type="password" id="password" name="password" placeholder="" required
+                                                        class="form-control form-input" autocomplete="off">
                                                     <h6>Password required to save</h6>
                                                 </div>
                                                 <div class="form-group row">
@@ -177,22 +171,18 @@
                                                 </h4>
                                             </div>
                                             <div class="col-lg-9 container">
-                                                <form method="post" action="#">
+                                                <form method="post" action="">
                                                     <div class="form-row align-items-center">
                                                         <div class="col-sm-5 my-1">
                                                             <label for="first_name" class="form-label">First
                                                                 name</label>
-                                                            <input type="text" class="form-input form-control"
-                                                                id="first_name" placeholder="First Name"
-                                                                value="{{current_user_data.first_name}}"
-                                                                name="first_name">
+                                                            <input type="text" class="form-input form-control" id="first_name"
+                                                                placeholder="First Name" value="{{current_user_data.first_name}}" name="first_name">
                                                         </div>
                                                         <div class="col-sm-5 my-1">
                                                             <label for="last_name" class="form-label">Last name</label>
-                                                            <input type="text" class="form-input form-control"
-                                                                id="last_name" placeholder="Last Name"
-                                                                value="{{current_user_data.last_name}}"
-                                                                name="last_name">
+                                                            <input type="text" class="form-input form-control" id="last_name" placeholder="Last Name"
+                                                                value="{{current_user_data.last_name}}" name="last_name">
                                                         </div>
 
 
@@ -201,9 +191,8 @@
                                                         <div class="col-sm-5 my-1">
                                                             <label for="birth_date" class="form-label">Birth
                                                                 Date</label>
-                                                            <input type="date" class="form-input form-control"
-                                                                id="birth_date" placeholder="Birth Date"
-                                                                value="12/12/2012">
+                                                            <input type="date" class="form-input form-control" id="birth_date"
+                                                                placeholder="Birth Date" name="dob" value="12/12/2012">
                                                         </div>
                                                     </div>
                                                     <div class="heading-section">
@@ -215,8 +204,7 @@
 
                                                         <div class="col-sm-5 my-1">
                                                             <label for="phone" class="form-label">Phone</label>
-                                                            <input type="text" class="form-input form-control"
-                                                                id="phone" placeholder="Phone"
+                                                            <input type="text" class="form-input form-control" id="phone" placeholder="Phone"
                                                                 value="{{current_user_data.phone}}">
                                                         </div>
 
@@ -224,35 +212,30 @@
                                                     <div class="form-row align-items-center">
                                                         <div class="col-sm-5 my-1">
                                                             <label for="address_1" class="form-label">Address 1</label>
-                                                            <input type="text" class="form-input form-control"
-                                                                id="address_1" placeholder="Address 1"
+                                                            <input type="text" class="form-input form-control" id="address_1" placeholder="Address 1"
                                                                 value="{{current_user_data.address_1}}">
                                                         </div>
                                                         <div class="col-sm-5 my-1">
                                                             <label for="address_2" class="form-label">Address 2</label>
-                                                            <input type="text" class="form-input form-control"
-                                                                id="address_2" placeholder="Address 2"
+                                                            <input type="text" class="form-input form-control" id="address_2" placeholder="Address 2"
                                                                 value="{{current_user_data.address_2}}">
                                                         </div>
                                                     </div>
                                                     <div class="form-row align-items-center">
                                                         <div class="col-sm-5 my-1">
                                                             <label for="town_city" class="form-label">Town/ City</label>
-                                                            <input type="text" class="form-input form-control"
-                                                                id="town_city" placeholder="Town/ City"
+                                                            <input type="text" class="form-input form-control" id="town_city" placeholder="Town/ City"
                                                                 value="{{current_user_data.town_city}}">
                                                         </div>
                                                         <div class="col-sm-5 my-1">
                                                             <label for="postcode" class="form-label">Postcode</label>
-                                                            <input type="text" class="form-input form-control"
-                                                                id="postcode" placeholder="Postcode"
+                                                            <input type="text" class="form-input form-control" id="postcode" placeholder="Postcode"
                                                                 value="{{current_user_data.postcode}}">
                                                         </div>
 
                                                     </div>
                                                     <div class="form-group row">
-                                                        <button type="submit" class="main-button"
-                                                            id="form-button">Save</button>
+                                                        <button type="submit" class="main-button" id="form-button">Save</button>
                                                     </div>
                                                 </form>
                                                 {% if updated_status == 'ok' %}
@@ -293,8 +276,7 @@
                             <div class="col-lg-12">
                                 <p>Copyright © 2036 <a href="#">Cyborg Gaming</a> Company. All rights reserved.
 
-                                    <br>Design: <a href="https://templatemo.com" target="_blank"
-                                        title="free CSS templates">TemplateMo</a> Distributed
+                                    <br>Design: <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a> Distributed
                                     By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
                                 </p>
                             </div>
@@ -304,8 +286,7 @@
 
 
                 <script src="{{url_for('catalog.static', filename='catalog/vendor/jquary/jquary.min.js')}}"></script>
-                <script
-                    src="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+                <script src="{{url_for('catalog.static', filename='catalog/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
 
                 <!-- Plugin JavaScript -->
                 <script src="{{url_for('catalog.static', filename='catalog/js/isotope.min.js')}}"></script>

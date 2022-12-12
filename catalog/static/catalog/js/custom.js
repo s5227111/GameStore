@@ -29,7 +29,8 @@
 	  var header = $('header').height();
 
 	  if (scroll >= box - header) {
-	    $("header").addClass("background-header");
+		  $("header").addClass("background-header22");
+
 	  } else {
 	    $("header").removeClass("background-header");
 	  }
@@ -104,6 +105,36 @@
 			}
 		}
 	})
+
+	$('.owl-tags').owlCarousel({
+		items:5,
+		loop:true,
+		dots: false,
+		nav: true,
+		autoplay: true,
+		margin:30,
+		responsive:{
+			  0:{
+				  items:1
+			  },
+			  600:{
+				  items:2
+			  },
+			  1200:{
+				  items:3
+			  },
+			  1800:{
+				items:5
+			},
+			2400: {
+				items: 6
+			},
+			3000: {
+				items: 6
+			}
+		}
+	})
+
 
 	$('.owl-collection').owlCarousel({
 		items:3,

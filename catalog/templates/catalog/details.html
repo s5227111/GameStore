@@ -59,20 +59,26 @@
                         <li><i class="fa fa-star"></i>{{game_dict['reviews']['stars']}}</li>
                         <li><i class="fa fa-download"></i>{{game_dict['downloads']}}</li>
                         <li><i class="fa fa-gamepad"></i>{{game_dict['tags'][0]}}</li>
+                        {% if not is_in_my_upvotes and current_user.is_authenticated %}
+                        <li><a href="{{url_for('catalog.upvote', game_id=game_dict['game_id'])}}"><i class="fa-solid fa-up-long"></i>Upvote</li></a>
+                        {% elif current_user.is_authenticated %}
+                        <li><a href="{{url_for('catalog.downvote', game_id=game_dict['game_id'])}}"><i class="fa-solid fa-down-long"></i>Downvote</li>
+                        </a>
+                        {% else %}
+                        <li><a href="{{url_for('auth.login')}}"><i class="fa-solid fa-up-long"></i>Upvote</li></a>
+                        {% endif %}
+
                       </ul>
                     </div>
                   </div>
                   <div class="col-lg-4">
-                    <img src="{{game_dict['images']['details-image1']}}" alt=""
-                      style="border-radius: 23px; margin-bottom: 30px;">
+                    <img src="{{game_dict['images']['details-image1']}}" alt="" style="border-radius: 23px; margin-bottom: 30px;">
                   </div>
                   <div class="col-lg-4">
-                    <img src="{{game_dict['images']['details-image2']}}" alt=""
-                      style="border-radius: 23px; margin-bottom: 30px;">
+                    <img src="{{game_dict['images']['details-image2']}}" alt="" style="border-radius: 23px; margin-bottom: 30px;">
                   </div>
                   <div class="col-lg-4">
-                    <img src="{{game_dict['images']['details-image3']}}" alt=""
-                      style="border-radius: 23px; margin-bottom: 30px;">
+                    <img src="{{game_dict['images']['details-image3']}}" alt="" style="border-radius: 23px; margin-bottom: 30px;">
                   </div>
                   <div class="col-lg-12">
                     <p>
@@ -80,13 +86,22 @@
                     </p>
                   </div>
                   <div class="col-lg-12">
-                    {% if current_user.is_in_my_games %}
+                    {% if not current_user.is_authenticated %}
+                    <div class=" main-border-button">
+                      <a href="{{url_for('auth.login')}}">Buy {{game_dict['name']}} now!</a>
+                    </div>
+                    {% elif is_in_my_games %}
                     <div class="main-border-button border-no-active">
                       <a href="#">You already have this game!</a>
                     </div>
+                    {% elif is_in_my_cart %}
+                    <div class=" main-border-button">
+                      <a href="{{url_for('auth.profile')}}">This game is already in your cart. Check it in your
+                        profile</a>
+                    </div>
                     {% else %}
                     <div class=" main-border-button">
-                      <a href="#">Buy {{game_dict['name']}} now!</a>
+                      <a href="{{url_for('catalog.add_to_my_cart', game_id=game_dict.game_id)}}">Buy {{game_dict['name']}} now!</a>
                     </div>
                     {% endif %}
                   </div>
@@ -108,7 +123,7 @@
               <div class="col-lg-6">
                 <div class="item">
                   <img src="{{game['images']['thumb_image']}}" alt="" class="templatemo-item">
-                  <a href="{{url_for('catalog.details', game_id=game['id'])}}" <h4>{{game['name']}}</h4>
+                  <a href="{{url_for('catalog.details', game_id=game['game_id'])}}" <h4>{{game['name']}}</h4>
                     <span>{{game['tags'][0]}}</span>
                   </a>
                   <ul>
@@ -127,20 +142,5 @@
       </div>
     </div>
   </div>
-
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <p>Copyright © 2036 <a href="#">Cyborg Gaming</a> Company. All rights reserved.
-
-            <br>Design: <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a>
-            Distributed By <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
 
   {% endblock %}

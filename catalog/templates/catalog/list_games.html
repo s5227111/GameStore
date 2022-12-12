@@ -1,0 +1,105 @@
+{% extends 'catalog/base.html' %}
+
+{% block title %}Browse Games {% endblock %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{{url_for('catalog.static', filename='catalog/css/list.css')}}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="page-content">
+                <div class="row">
+                    <div class="search-content">
+                        <div class="section-header">
+                            <h2>You searched for: <em>{{query}}</em></h2>
+                            <p>{{games | length}} results were found</p>
+                        </div>
+                        <!-- ***** Filter and sorting starts here -->
+                        <div class="row">
+                            <div class="filter-section">
+                                <h6>Available Filters</h6>
+                            </div>
+                            <div class="col-sm-5">
+                                <form action="{{url_for('catalog.list_games', searchKeyword=query)}}" method="get">
+                                    <div class="row">
+                                        <input type="text" value="{{query}}" style="visibility: hidden;" name="searchKeyword" id="searchKeyword">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="filter-selector" class="form-label">Order by</label>
+                                                <select class="form-select" aria-label="Default select example" name="sort_by" id="filter-selector">
+                                                    <option selected>Sort by</option>
+                                                    <option value="">Relevance</option>
+                                                    <option value="price">Price</option>
+                                                    <option value="downloads">Downloads</option>
+                                                    <option value="reviews.stars">Stars</option>
+                                                    <option value="added_at">Date added</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="order-typr" class="form-label">Order type</label>
+                                                <select class="form-select" aria-label="Default select example" name="sort_order" id="order-type">
+                                                    <option selected>Sort order</option>
+                                                    <option value="1">Ascending</option>
+                                                    <option value="-1">Descending</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="form-button" class="form-label" style="visibility: hidden;">Search</label>
+                                                <button name="form-button" id="form-button" class="main-button" type="submit">Filter</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- ***** Filter and sorting ends here -->
+                        <!-- ***** Games list starts here ***** -->
+                        <div class="row">
+                            {% for game in games %}
+                            <div class="item">
+                                <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                                            <img src="{{game['images']['thumb_image']}}" alt="" class="rounded">
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <h4>{{game['name']}}</h4>
+                                            <p>{{game['tags'][0]}}</p>
+                                            <ul>
+                                                <li><i class="fa fa-star" style="color: yellow; margin-left: 5px;"></i>{{game['reviews']['stars']}}
+                                                </li>
+                                                <li><i class="fa fa-download" style="color: #ec6090; margin-left: 5px;"></i>{{game['downloads']}}</li>
+                                                <li><i class="fa-solid fa-dollar-sign" style="color: green; margin-left: 5px;"></i>{{game["pricing"]}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-sm-6 game-details">
+                                            <p>{{game['details']['long_description']}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <!-- ***** Games list ends here ***** -->
+                        {% if (games | length) > 10 %}
+                        <div class="row">
+                            <a href="{{url_for('catalog.list_games', searchKeyword=query, start_at=9)}}">Next page</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

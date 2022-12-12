@@ -1,4 +1,14 @@
 # Flask packages and plugins
+# TABLE OF CONTENTS
+# 1. Imports
+# 2. Login Routes
+# 3. Logout Route
+# 4. Register Route
+# 5. Forgot Password Route !TODO Currently, this application does not have a mail server
+# 7. Verify Email Route !TODO Currently, this application does not have a mail server
+# 8. Configure Blueprint
+
+
 from flask import (
     Blueprint,
     render_template,
@@ -11,7 +21,13 @@ from flask import (
 )
 
 # Models
-from .models import UserQuery, PersonalData, Contact, Address, PasswordReset
+from .models import (
+    UserQuery,
+    PersonalData,
+    Contact,
+    Address,
+    User,
+)
 
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -19,9 +35,10 @@ from flask_login import login_user, logout_user, login_required, current_user
 from .serealizer import UserSchema
 from marshmallow import ValidationError
 
+import requests
 
-# Views stores all end points (urls), ROTAS do meu projeto
-# Blueprint: aplicacoes (funcionalidades dentro de um projeto) reutilizaveis
+from cloud_functions.cloud_tools import get_cloud_function_url
+
 auth_bp = Blueprint(
     "auth",
     __name__,
@@ -39,16 +56,17 @@ def configure(app):
 # Login Routes
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
 
         try:
-            username_email = request.form["username"]
+            email = request.form["email"]
             password = request.form["password"]
             # Try to find the user by email
-            user = UserQuery.get_user_by_username_or_email(username_email)
+            user = User.query.filter_by(email=email).first()
 
             if user:
-                # Berify if password is correct
+                # Verify if password is correct
                 if user.check_password_hash(password):
                     # Login user
                     login_user(user)
@@ -77,137 +95,52 @@ def logout():
 
 @auth_bp.route("/register", methods=["POST", "GET"])
 def register():
-    return render_template("auth/register.html")
-
-
-@auth_bp.route("/validate-email", methods=["POST", "GET"])
-def validate_email():
-
-    # Verify if email is already exists
-    email_exists = False
 
     if request.method == "POST":
-
         try:
+
             email = request.form["email"]
+            username = request.form["username"]
+            password = request.form["password"]
 
             # Verify if email is already exists
-            user = UserQuery.get_user_by_email(email)
-
+            user = User.query.filter_by(email=email).first()
             if user:
-                email_exists = True
-
-                return (
-                    render_template(
-                        "auth/validate_email.html", email_exists=email_exists
-                    ),
-                    400,
-                )
-
-            # TODO SEND CONFIRMATION EMAIL
-            session["email"] = email
-            session["on_register"] = True
-
-            return redirect(url_for("auth.validate_username"))
-
-        except KeyError:
-
-            return redirect("auth.register"), 400
-
-    return render_template("auth/validate_email.html"), 200
-
-
-@auth_bp.route("/validate-username", methods=["POST", "GET"])
-def validate_username():
-
-    username_exists = False
-
-    if request.method == "POST":
-        try:
-            username = request.form["username"]
+                return render_template("auth/register.html", email_exists=True)
 
             # Verify if username is already exists
-            user = UserQuery.get_user_by_username(username)
+            user = User.query.filter_by(username=username).first()
 
             if user:
-                username_exists = True
                 return render_template(
-                    "auth/validate_username.html", username_exists=username_exists
+                    "auth/register.html", username_exists=True
                 )
-
-            # Verify if session has email and if user has validated email
-            if session.get("email") and session.get("on_register"):
-                session["username"] = username
-                return redirect(url_for("auth.validate_password"))
-
-        # Verify if username is already exists
-        except KeyError():
-            return render_template("auth.register")
-
-    if session.get("email") and session.get("on_register"):
-        return render_template("auth/validate_username.html")
-
-    return redirect(url_for("auth.register"))
-
-
-@auth_bp.route("/validate-password", methods=["POST", "GET"])
-def validate_password():
-
-    if request.method == "POST":
-        try:
-            password = request.form["password"]
-
-            # Verify if session has email and if user has validated email
-
-            password = request.form["password"]
-            email = session["email"]
-            username = session["username"]
-            _ = session.pop("on_register")
 
             # Create user
             us = UserSchema()
+            user = us.load(
+                {
+                    "email": email,
+                    "username": username,
+                    "password": password,
+                }
+            )
+            # Add relationship with other tables
+            user.personal_data = PersonalData()
+            user.contact = Contact()
+            user.address = Address()
 
-            try:
-                user = us.load(
-                    {"username": username, "email": email, "password": password}
-                )
+            # Save user
+            user.save()
+            login_user(user)
 
-                user_personal_data = PersonalData()
-                user_contact = Contact()
-                user_address = Address()
-                user_password_reset = PasswordReset()
+            return redirect(url_for("catalog.home"))
 
-                user.personal_data = user_personal_data  # 1:1
-                user.contact = user_contact  # 1:1
-                user.address = user_address  # 1:1
-                user.password_reset = user_password_reset  # 1:1
-
-                current_app.db.session.add_all(
-                    [
-                        user,
-                        user_personal_data,
-                        user_contact,
-                        user_address,
-                        user_password_reset,
-                    ]
-                )
-
-                current_app.db.session.commit()
-                session.clear()
-                return redirect(url_for("auth.login"))
-
-            except ValidationError:
-                return abort(404), 400
-
-            return redirect(url_for("auth.confirmation"))
-
+        # For some reason, the user did not fill in the email field
         except KeyError:
-            return redirect("auth.register")
+            return redirect(url_for("auth.register"))
 
-    if session.get("email") and session.get("username") and session.get("on_register"):
-        return render_template("auth/validate_password.html")
-
-    return redirect(url_for("auth.register"))
+    return render_template("auth/register.html")
 
 
 @auth_bp.route("/forgot-password", methods=["POST", "GET"])
@@ -219,7 +152,7 @@ def forgot_password():
             new_password = request.form["password"]
 
             # Verify if email is registered on the db
-            user = UserQuery.get_user_by_email(email)
+            user = User.query.filter_by(email=email).first()
 
             if user:
                 # Send email to retrieve password
@@ -237,7 +170,7 @@ def forgot_password():
                     True  # When implement email sending, remove this line
                 )
 
-                current_app.db.session.commit()
+                current_app.db.session.commit()  # type: ignore
                 return redirect(url_for("auth.login"))
 
         # EMAIL NULL
@@ -250,16 +183,71 @@ def forgot_password():
 @auth_bp.route("/profile", methods=["GET"])
 @login_required
 def profile():
-    # IMPLEMENT USER PROFILE PAGE
-    return render_template("auth/profile.html")
+
+    current_user_data = current_user.to_dict()
+    current_user_games_ids = current_user_data["my_games"]
+
+    # Get user games
+    # Note: the user ``my_games`` is a list of games ids. To get the games data, we need to use ``catalog_api``
+    # The games data is stored in the catalog database in mongoDB
+    # Note: in future, functions GET type in ``catalog_api`` will be a cloud functions.
+    # This functions will need to change the way to get the data
+
+    # Get user games
+    user_games = []
+
+    # Get cloud function url
+    get_game_by_id_url = get_cloud_function_url("get-game-by-id")
+
+    for g in current_user_games_ids:
+
+        game = requests.get(
+            get_game_by_id_url,
+            timeout=30,
+            params={"game_id": g["game_id"]},
+        ).json()["data"][0]
+
+        user_games.append(game)
+
+    # Get user cart
+    # idem to user games
+    user_cart = []
+
+    for g in current_user_data["user_cart"]:
+        game = requests.get(
+            get_game_by_id_url,
+            timeout=30,
+            params={"game_id": g["game_id"]},
+        ).json()["data"][0]
+
+        user_cart.append(game)
+
+    # Get user history
+    # idem to user games and user
+    user_history = []
+
+    for g in current_user_data["products_history"]:
+        game = requests.get(
+            get_game_by_id_url,
+            timeout=30,
+            params={"game_id": g["game_id"]},
+        ).json()["data"][0]
+
+        user_history.append(game)
+
+    return render_template(
+        "auth/profile.html",
+        user_cart=user_cart,
+        user_games=user_games,
+        user_history=user_history,
+    )
 
 
 @auth_bp.route("/edit-profile", methods=["POST", "GET"])
 @login_required
 def edit_profile():
-    # IMPLEMENT USER PROFILE PAGE
 
-    current_user_data = UserQuery.get_user_by_id(current_user.id).to_dict()
+    current_user_data = current_user.to_dict()
 
     msgs = []
 
@@ -271,14 +259,20 @@ def edit_profile():
         login_fields = ["username", "email", "password"]
         personal_data_fields = ["first_name", "last_name", "dob"]
         contact_fields = ["phone", "mobile"]
-        address_fields = ["address_1", "address_2", "town_city", "county", "postcode"]
+        address_fields = [
+            "address_1",
+            "address_2",
+            "town_city",
+            "county",
+            "postcode",
+        ]
 
         # Verify if the user is trying to update login data
         if any(field in data for field in login_fields):
 
             try:
                 UserQuery.update_login_data(current_user.id, data)
-                msgs.append("Login data updated successfully")
+                msgs.append("Login data updated")
                 return render_template(
                     "auth/edit_profile.html",
                     msgs=msgs,
@@ -343,7 +337,9 @@ def edit_profile():
             )
 
     return render_template(
-        "auth/edit_profile.html", current_user_data=current_user_data, msgs=msgs
+        "auth/edit_profile.html",
+        current_user_data=current_user_data,
+        msgs=msgs,
     )
 
 

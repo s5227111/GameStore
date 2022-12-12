@@ -4,8 +4,6 @@ from flask import Flask
 from auth.views import configure as config_auth
 from auth.models import configure as config_db
 
-from api_catalog.views import configure as config_api_catalog
-from api_catalog.models import configure as config_db_api_catalog
 
 from catalog.views import configure as config_catalog
 
@@ -16,12 +14,11 @@ def create_app(test_mode=False):
 
     # configuring views
     config_auth(app)
-    config_api_catalog(app)
+
     config_catalog(app)
 
     # configuring bd
     config_db(app, test_mode)
-    config_db_api_catalog(app, test_mode)
 
     return app
 

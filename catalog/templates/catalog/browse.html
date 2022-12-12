@@ -1,0 +1,195 @@
+{% extends "catalog/base.html" %}
+{% block title %}Browse Games{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="page-content">
+
+        <!-- ***** Featured Games Start ***** -->
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="featured-games header-text">
+              <div class="heading-section">
+                <h4><em>Most upvoted</em> Games</h4>
+              </div>
+              <div class="owl-features owl-carousel">
+                {% for game in most_upvoted_games %}
+                <div class="item">
+                  <div class="thumb">
+                    <img src="{{game['images']['thumb_image']}}" alt="">
+                    <div class="hover-effect">
+                      <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                        <h6>view game details</h6>
+                      </a>
+                    </div>
+                  </div>
+                  <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                    <h4>{{game['name']}}<br><span>{{game['tags'][0]}}</span></h4>
+                  </a>
+                  <ul>
+                    <li><i class="fa fa-star"></i>{{game['reviews']['stars']}}</li>
+                    <li><i class="fa fa-download"></i>{{game['downloads']}}</li>
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="top-downloaded">
+              <div class="heading-section">
+                <h4><em>Top</em> Downloaded</h4>
+              </div>
+              <ul>
+                {% for game in most_downloaded_games %}
+                <li>
+                  <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                    <img src="{{game['images']['thumb_image']}}" alt="" class="templatemo-item">
+                    <h4>{{game['name']}}</h4>
+                    <h6>{{game['tags'][0]}}</h6>
+                    <span><i class="fa fa-star" style="color: yellow;"></i> {{game['reviews']['stars']}}</span>
+                    <span><i class="fa fa-download" style="color: #ec6090;"></i>{{game['downloads']}}</span>
+                    <span><i class="fa-solid fa-dollar-sign" style="color: green;"></i>{{game["pricing"]}}</span>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- ***** Featured Games End ***** -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="featured-games header-text tag-section">
+              <div class="heading-section">
+                <h4><em>Last Added </em> Games</h4>
+              </div>
+              <div class="owl-tags owl-carousel">
+                {% for game in recent_added_games %}
+                <div class="item">
+                  <div class="thumb">
+                    <img src="{{game['images']['thumb_image']}}" alt="">
+                    <div class="hover-effect">
+                      <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                        <h6>view game details</h6>
+                      </a>
+                    </div>
+                  </div>
+                  <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                    <h4>{{game['name']}}<br><span>{{game['tags'][0]}}</span></h4>
+                  </a>
+                  <ul>
+                    <li><i class="fa fa-star"></i>{{game['reviews']['stars']}}</li>
+                    <li><i class="fa fa-download"></i>{{game['downloads']}}</li>
+                    <li><i class="fa fa-calendar"></i>{{game['added_at']}}</li>
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div <!-- ***** Recent Games stats Here ***** -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="featured-games header-text tag-section">
+              <div class="heading-section">
+                <h4><em>Best Casual </em> Games</h4>
+              </div>
+              <div class="owl-tags owl-carousel">
+                {% for game in most_upvoted_casual_games %}
+                <div class="item">
+                  <div class="thumb">
+                    <img src="{{game['images']['thumb_image']}}" alt="">
+                    <div class="hover-effect">
+                      <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                        <h6>view game details</h6>
+                      </a>
+                    </div>
+                  </div>
+                  <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                    <h4>{{game['name']}}<br><span>{{game['tags'][0]}}</span></h4>
+                  </a>
+                  <ul>
+                    <li><i class="fa fa-star"></i>{{game['reviews']['stars']}}</li>
+                    <li><i class="fa fa-download"></i>{{game['downloads']}}</li>
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ****** Most Upvoted Offline Games ****** -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="featured-games header-text tag-section">
+              <div class="heading-section">
+                <h4><em>Best Offline </em> Games</h4>
+              </div>
+              <div class="owl-tags owl-carousel">
+                {% for game in most_upvoted_offline_games %}
+                <div class="item">
+                  <div class="thumb">
+                    <img src="{{game['images']['thumb_image']}}" alt="">
+                    <div class="hover-effect">
+                      <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                        <h6>view game details</h6>
+                      </a>
+                    </div>
+                  </div>
+                  <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                    <h4>{{game['name']}}<br><span>{{game['tags'][0]}}</span></h4>
+                  </a>
+                  <ul>
+                    <li><i class="fa fa-star"></i>{{game['reviews']['stars']}}</li>
+                    <li><i class="fa fa-download"></i>{{game['downloads']}}</li>
+                    <li><i class="fa-solid fa-dollar-sign"></i>{{game["pricing"]}}</li>
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- ****** Most Upvoted Multiplayer Games ****** -->
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="featured-games header-text tag-section">
+              <div class="heading-section">
+                <h4><em>Best Multiplayer </em> Games</h4>
+              </div>
+              <div class="owl-tags owl-carousel">
+                {% for game in most_upvoted_multiplayer_games %}
+                <div class="item">
+                  <div class="thumb">
+                    <img src="{{game['images']['thumb_image']}}" alt="">
+                    <div class="hover-effect">
+                      <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                        <h6>view game details</h6>
+                      </a>
+                    </div>
+                  </div>
+                  <a href="{{url_for('catalog.details', game_id=game['game_id'])}}">
+                    <h4>{{game['name']}}<br><span>{{game['tags'][0]}}</span></h4>
+                  </a>
+                  <ul>
+                    <li><i class="fa fa-star"></i>{{game['reviews']['stars']}}</li>
+                    <li><i class="fa fa-download"></i>{{game['downloads']}}</li>
+                    <li><i class="fa-solid fa-dollar-sign"></i>{{game["pricing"]}}</li>
+                  </ul>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ***** Live Stream End ***** -->
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

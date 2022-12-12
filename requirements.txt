@@ -7,3 +7,4 @@ Flask-Login==0.6.2
 Flask-PyMongo==2.3.0
 requests==2.26.0
 cryptography==38.0.4
+pyjwt==2.3.0

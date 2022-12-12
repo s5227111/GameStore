@@ -1,0 +1,207 @@
+/* TABLE OF CONTENTS */
+/* 0.0 Error boxes  and tools */
+/* 1.0 - Login Page  */
+/* 2.0 - Register Page*/
+/* 3.0 - User profile Page */
+
+/* Tools */
+
+.error-box{
+    
+    margin: 50px auto;
+    background-color: #1f2122;
+    border-radius: 15px;
+    width: 66%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 400;
+
+}
+
+.error-box p{
+    padding: 12px;
+    color: #c82334;
+    
+}
+
+.section-header{
+    text-align: center;
+    padding: 50px;
+}
+
+
+.section-header p{
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.alert-warning{
+    background-color: #1f2122;
+    border: none;
+    color: #ec6090;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 15px;
+    padding: 12px;
+    margin-bottom: 20px;
+}
+
+.alert-warning a{
+    color: #e75e8d;
+    transition: all .3s;
+}
+
+.alert-warning a:hover{
+    color: #fff;
+}
+
+
+/* Login page starts here */
+
+
+.login-content .login-form{
+    margin: 0 auto;
+}
+
+.login-content .form-control{
+    background-color: #1f2122;;
+    height: 55px;
+    border-radius: 23px;
+    border: none;
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 35px;
+    transition: all .3s;
+    text-align: center;
+   
+    
+}
+
+
+.login-content .form-control:focus, .login-content .form-control:active{
+    background-color: #1f2122;
+    border: none;
+    box-shadow: none;
+    transform: scaleX(1.05);
+    border: 2px solid #e75e8d;
+}
+
+
+
+.login-content .form-group label{
+    margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: 400;
+    color: #ec6090
+}
+
+.login-content .col-sm-12{
+    display: flex;
+}
+
+.login-content .form-button{
+    font-size: 18px;
+    color: #fff;
+    background-color: #e75e8d;
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    transition: all 0.5s;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.login-content .form-button:hover{
+    background-color: #fff;
+    color: #e75e8d;
+}
+
+.login-content .row ul{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 35px;
+    font-size: 16px;
+}
+
+
+/* Register Starts here */
+.register-content{
+    background-color: #1f2122;
+    border-radius: 23px;
+}
+
+
+
+.register-content .register-form{
+    margin: 0 auto;
+    padding-bottom: 70px;
+   
+}
+
+.register-content .form-group label{
+    color: #e75e8d;
+}
+
+.register-content .form-control{
+    
+    background-color: #27292a;;
+    height: 55px;
+    border-radius: 23px;
+    border: none;
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 35px;
+    transition: all .3s;
+    text-align: center;
+   
+}
+
+.password-info{
+    display: flex;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 10px;
+}
+
+.password-info ul{
+    margin: 0 auto;
+}
+
+.register-content .col-sm-12{
+    display: flex;
+}
+
+.register-content .form-button{
+    font-size: 18px;
+    color: #fff;
+    background-color: #e75e8d;
+    padding: 12px 30px;
+    border-radius: 25px;
+    border: none;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    transition: all 0.5s;
+    position: relative;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+
+.register-content .form-button:hover{
+    background-color: #fff;
+    color: #e75e8d;
+}
+
+.register-content .form-button:disabled{
+    background-color: #666;
+    color: #fff;
+}
+
+
+/* User profile style starts here */
+

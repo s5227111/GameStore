@@ -83,11 +83,13 @@ Game Store | Catalog
             <div class="item">
               <ul>
                 <li>
-                  <img src="{{user_games[game_index]['images'][thumb_image]}}" alt="" class="templatemo-item" />
+                  <img src="{{user_games[game_index]['images']['thumb_image']}}" alt="" class="templatemo-item" />
                 </li>
                 <li>
-                  <h4>{{user_games[game_index]['name']}}</h4>
-                  <span>{{user_games[game_index]['tags'][0]}}</span>
+                  <a href="{{url_for('catalog.details', game_id=user_games[game_index]['game_id'])}}">
+                    <h4>{{user_games[game_index]['name']}}</h4>
+                    <span>{{user_games[game_index]['tags'][0]}}</span>
+                  </a>
                 </li>
                 <li>
                   <h4>Date Added</h4>
@@ -115,7 +117,7 @@ Game Store | Catalog
 
             <div class="col-lg-12">
               <div class="main-button">
-                <a href="profile.html">View Your Library</a>
+                <a href="{{url_for('auth.profile')}}">View Your Library</a>
               </div>
             </div>
 
@@ -134,23 +136,4 @@ Game Store | Catalog
     </div>
   </div>
 </div>
-
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
-        <p>
-          Copyright © 2036 <a href="#">Cyborg Gaming</a> Company. All rights
-          reserved.
-
-          <br />Design:
-          <a href="https://templatemo.com" target="_blank" title="free CSS templates">TemplateMo</a>
-          Distributed By
-          <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-        </p>
-      </div>
-    </div>
-  </div>
-</footer>
-
 {% endblock %}

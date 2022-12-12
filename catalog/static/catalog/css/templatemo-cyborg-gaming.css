@@ -1042,6 +1042,12 @@ Featured Games Style
   padding: 30px;
 }
 
+.featured-games.tag-section{
+  
+  margin-top: 70px;
+
+}
+
 .featured-games .item .thumb {
   position: relative;
   overflow: hidden;
@@ -1687,6 +1693,15 @@ Profile Style
   text-align: center;
   line-height: 46px;
   color: #ec6090;
+  font-size: 23px;
+  transition: all 0.3s;
+  opacity: 0.6;
+}
+
+.clips .item .thumb a:hover {
+  background-color: #ec6090;
+  color: #fff;
+  opacity: 1;
 }
 
 .clips .item h4 {
@@ -1708,6 +1723,27 @@ Profile Style
   margin-top: 10px;
   text-align: center;
 }
+
+.clips .remove-cart{
+
+  font-size: 35px;
+  
+  margin: -55px 0 0 0;
+  text-align: center;
+ 
+}
+
+.clips .remove-cart a{
+  color: #ec6090;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.clips .remove-cart a:hover, .clips .remove-cart a:focus{
+  color: #fff;
+  transform: scale(1.1);
+}
+
 
 /* 
 ---------------------------------------------

@@ -7,8 +7,10 @@ import pymysql
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from typing import Union
+from datetime import datetime
 
 from marshmallow import ValidationError
+
 
 # Instantiate db manager
 pymysql.install_as_MySQLdb()
@@ -19,16 +21,16 @@ login_manager = LoginManager()
 
 
 @login_manager.user_loader
-def load_user(user_id: int) -> Union[db.Model, None]:
-    return UserQuery.get_user_by_id(user_id)
+def load_user(user_id: int) -> Union[db.Model, None]:  # type: ignore
+    return User.query.get(user_id)
 
 
 def configure(app, test_mode=False):
 
     if test_mode:
-        DB_URI = "mysql://root:newcicle23@127.0.0.1/unittest_gamestore"
+        DB_URI = "mysql://root:1234@127.0.0.1/gs_unittest"
     else:
-        DB_URI = "mysql://root:newcicle23@127.0.0.1/gs_user_data"
+        DB_URI = "mysql://root:1234@127.0.0.1/gs_user_data_local"
 
     app.config["SQLALCHEMY_DATABASE_URI"] = DB_URI
 
@@ -39,20 +41,21 @@ def configure(app, test_mode=False):
     app.login_manager = login_manager
 
 
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin):  # type: ignore
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
-
-    is_email_verified = db.Column(db.Boolean, default=False)
-    # is_active = db.Column(db.Boolean, default=False)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
     joined_at = db.Column(db.DateTime, default=db.func.now())
+    is_email_verified = db.Column(db.Boolean, nullable=False, default=False)
 
     # Relationships one-to-one PersonalData
-    personal_data = db.relationship("PersonalData", backref="users", uselist=False)
+    personal_data = db.relationship(
+        "PersonalData", backref="users", uselist=False
+    )
 
     # Relationships one-to-one Contact
     contact = db.relationship("Contact", backref="users", uselist=False)
@@ -60,14 +63,20 @@ class User(db.Model, UserMixin):
     # Relationships one-to-one Address
     address = db.relationship("Address", backref="users", uselist=False)
 
-    # Relationships one-to-one PasswordReset
-    password_reset = db.relationship("PasswordReset", backref="users", uselist=False)
+    # Relationships one-to-many PasswordReset
+    password_reset = db.relationship("PasswordReset", backref="users")
 
     # Relationships one-to-many Games
     my_games = db.relationship("myGames", backref="users")
 
     # Relationships one-to-many userCart
     user_cart = db.relationship("userCart", backref="users")
+
+    # Relationships one-to-many starredGames
+    upvotes = db.relationship("Upvotes", backref="users")
+
+    # Relationships one-to-many productsHistory
+    products_history = db.relationship("productsHistory", backref="users")
 
     def hash_password(self) -> None:
         self.password = generate_password_hash(self.password)
@@ -86,12 +95,18 @@ class User(db.Model, UserMixin):
             "personal_data": self.personal_data.to_dict(),
             "contact": self.contact.to_dict(),
             "address": self.address.to_dict(),
-            "password_reset": self.password_reset.to_dict(),
+            "password_reset": [
+                reset.to_dict() for reset in self.password_reset
+            ],
             "my_games": [game.to_dict() for game in self.my_games],
             "user_cart": [cart.to_dict() for cart in self.user_cart],
+            "upvotes": [game.to_dict() for game in self.upvotes],
+            "products_history": [
+                history.to_dict() for history in self.products_history
+            ],
         }
 
-    def save(self) -> Union[db.Model, None]:
+    def save(self) -> Union[db.Model, None]:  # type: ignore
         """
         Save user to database
         """
@@ -100,11 +115,31 @@ class User(db.Model, UserMixin):
         db.session.commit()
         return self
 
+    def add_products_history(self, product_id: int) -> None:
+        """
+        Add product to products history
+        """
+
+        # Check if product is already in history
+        for history in self.products_history:
+            if history.game_id == product_id:
+                return None
+
+        history = productsHistory(user_id=self.id, game_id=product_id)
+        self.products_history.append(history)
+
+        # history is limited to 5 products
+        if len(self.products_history) >= 5:
+            self.products_history.pop(0)
+
+        db.session.add(history)
+        db.session.commit()
+
     def __repr__(self):
         return f"<User> username={self.username}, email={self.email}"
 
 
-class PersonalData(db.Model):
+class PersonalData(db.Model):  # type: ignore for some reason mypy is not happy with this
     __tablename__ = "personal_data"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -120,13 +155,24 @@ class PersonalData(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "dob": self.dob,
+            "is_empty": self.check_if_empty(),
         }
+
+    def check_if_empty(self) -> bool:
+
+        """
+        Check if all fields are empty
+        This functions is used in profile page to check if user has filled in personal data
+        """
+        if not self.first_name or not self.last_name or not self.dob:
+            return True
+        return False
 
     def __repr__(self):
         return f"<PersonalData> user_id={self.user_id}, first_name={self.first_name}, last_name={self.last_name}, dob={self.dob}"
 
 
-class Address(db.Model):
+class Address(db.Model):  # type: ignore for some reason mypy is not happy with this
     __tablename__ = "address"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -150,7 +196,7 @@ class Address(db.Model):
         }
 
 
-class Contact(db.Model):
+class Contact(db.Model):  # type: ignore for some reason mypy is not happy with this
     __tablename__ = "contact"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -170,7 +216,7 @@ class Contact(db.Model):
         return f"<Contact> user_id={self.user_id}, phone={self.phone}"
 
 
-class PasswordReset(db.Model):
+class PasswordReset(db.Model):  # type: ignore for some reason mypy is not happy with this
     __tablename__ = "reset_password"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -192,14 +238,16 @@ class PasswordReset(db.Model):
         return f"<ResetPassword> user_id={self.user_id}, token={self.token}, expires_at={self.expires_at}, is_used={self.is_used}"
 
 
-class myGames(db.Model):
+class myGames(db.Model):  # type: ignore for some reason mypy is not happy with this
     __tablename__ = "my_games"
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     game_id = db.Column(db.Integer, unique=True)
     added_at = db.Column(db.DateTime, default=db.func.now())
-    is_downloaded = db.Column(db.Boolean, default=False)  # if the game is downloaded
+    is_downloaded = db.Column(
+        db.Boolean, default=False
+    )  # if the game is downloaded
 
     def to_dict(self) -> dict:
         my_games_dict = {
@@ -215,7 +263,7 @@ class myGames(db.Model):
         return f"<myGames> user_id={self.user_id}, game_id={self.game_id}"
 
 
-class userCart(db.Model):
+class userCart(db.Model):  # type: ignore for some reason mypy is not happy with this
     """
     User cart
     """
@@ -242,6 +290,49 @@ class userCart(db.Model):
         return f"<userCart> user_id={self.user_id}, game_id={self.game_id}"
 
 
+class Upvotes(db.Model):  # type: ignore for some reason mypy is not happy with this
+
+    __tablename__ = "upvotes"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    game_id = db.Column(db.Integer, unique=True)
+    added_at = db.Column(db.DateTime, default=db.func.now())
+
+    def to_dict(self) -> dict:
+        starred_games_dict = {
+            "id": self.id,
+            "user_id": self.user_id,
+            "game_id": self.game_id,
+            "added_at": self.added_at,
+        }
+        return starred_games_dict
+
+    def __repr__(self):
+        return (
+            f"<starred_games> user_id={self.user_id}, game_id={self.game_id}"
+        )
+
+
+class productsHistory(db.Model):  # type: ignore for some reason mypy is not happy with this
+
+    __tablename__ = "products_history"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    game_id = db.Column(db.Integer)
+    added_at = db.Column(db.DateTime, default=db.func.now())
+
+    def to_dict(self) -> dict:
+        products_history_dict = {
+            "id": self.id,
+            "user_id": self.user_id,
+            "game_id": self.game_id,
+            "added_at": self.added_at,
+        }
+        return products_history_dict
+
+
 class UserQuery:
 
     """
@@ -249,87 +340,54 @@ class UserQuery:
     """
 
     @staticmethod
-    def get_user_by_email(email: str) -> Union[User, None]:
-        query = (
-            db.session.execute(db.select(User).where(User.email == email))
-            .scalars()
-            .first()
-        )
-
-        return query
-
-    @staticmethod
-    def get_user_by_username(username: str) -> Union[User, None]:
-        query = (
-            db.session.execute(db.select(User).where(User.username == username))
-            .scalars()
-            .first()
-        )
-
-        return query
-
-    @staticmethod
-    def get_user_by_username_or_email(username_or_email: str) -> Union[User, None]:
-        query = (
-            db.session.execute(
-                db.select(User).where(
-                    (User.username == username_or_email)
-                    | (User.email == username_or_email)
-                )
-            )
-            .scalars()
-            .first()
-        )
-
-        return query
-
-    @staticmethod
-    def get_user_by_id(user_id: int) -> Union[User, None]:
-        query = (
-            db.session.execute(db.select(User).where(User.id == user_id))
-            .scalars()
-            .first()
-        )
-
-        return query
-
-    @staticmethod
     def update_login_data(user_id: int, data: dict) -> None:
 
-        user = UserQuery.get_user_by_id(user_id)
+        """
+        Update user login data. The data is already validated, so we just need to check
+        if the email or username is already in use and password is correct
+        """
 
-        # Check if pwd correct and remove from dict
+        user = User.query.filter_by(id=user_id)
+
+        # check if password is the same that is registered and remove it from the data
         if "password" in data:
             if not user.check_password_hash(data["password"]):
                 raise ValidationError("Password is not correct")
-
             del data["password"]
 
-            for k, v in data.items():
-                # check if email is the one to be updadted
-                if k == "email":
-                    # check if email is already in the database
-                    if UserQuery.get_user_by_email(v):
-                        raise ValidationError("Email already in use")
+        for k, v in data.items():
+            # check if email is the one to be updated
+            if k == "email":
+                # check if email is already in the database
+                if User.query.filter_by(email=v).first():
+                    raise ValidationError("Email already in use")
 
-                elif k == "username":
-                    if UserQuery.get_user_by_username(v):
-                        raise ValidationError("Username already in use")
+            elif k == "username":
+                if User.query.filter_by(username=v).first():
+                    raise ValidationError("Username already in use")
 
-                # update the user data
-                setattr(user, k, v)
+            # update the user data
+            setattr(user, k, v)
 
         db.session.commit()
 
     @staticmethod
     def update_personal_data(user_id: int, data: dict) -> None:
-        # Update the user personal data, data need to be validated before
 
-        user = UserQuery.get_user_by_id(user_id)
+        """
+        Update the user personal data. The data is validated before, so we can just update the data
+        """
+
+        user = User.query.filter_by(id=user_id).first()
+        personal_data = user.personal_data
 
         for k, v in data.items():
             # update the user data
-            setattr(user, k, v)
+            # if k is dob, we need to convert it to datetime
+            if k == "dob":
+                v = datetime.strptime(v, "%Y-%m-%d")
+
+            setattr(personal_data, k, v)
 
         db.session.commit()
 
@@ -337,11 +395,11 @@ class UserQuery:
     def update_contact_data(user_id: int, data: dict) -> None:
         # Update the user contact data
 
-        user = UserQuery.get_user_by_id(user_id)
+        user = User.query.filter_by(id=user_id).first()
 
         for k, v in data.items():
             # update the user data
-            setattr(user, k, v)
+            setattr(user.contact, k, v)
 
         db.session.commit()
 
@@ -349,10 +407,10 @@ class UserQuery:
     def update_address_data(user_id: int, data: dict) -> None:
         # Update the user address data
 
-        user = UserQuery.get_user_by_id(user_id)
+        user = User.query.filter_by(id=user_id).first()
 
         for k, v in data.items():
             # update the user data
-            setattr(user, k, v)
+            setattr(user.address, k, v)
 
         db.session.commit()
