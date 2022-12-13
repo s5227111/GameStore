@@ -30,7 +30,7 @@ def configure(app, test_mode=False):
     if test_mode:
         DB_URI = "mysql://root:1234@127.0.0.1/gs_unittest"
     else:
-        DB_URI = "mysql://root:1234@127.0.0.1/gs_user_data_local"
+        DB_URI = "mysql://root:1234@34.89.56.248/gamestore"
 
     app.config["SQLALCHEMY_DATABASE_URI"] = DB_URI
 
@@ -53,9 +53,7 @@ class User(db.Model, UserMixin):  # type: ignore
     is_email_verified = db.Column(db.Boolean, nullable=False, default=False)
 
     # Relationships one-to-one PersonalData
-    personal_data = db.relationship(
-        "PersonalData", backref="users", uselist=False
-    )
+    personal_data = db.relationship("PersonalData", backref="users", uselist=False)
 
     # Relationships one-to-one Contact
     contact = db.relationship("Contact", backref="users", uselist=False)
@@ -95,9 +93,7 @@ class User(db.Model, UserMixin):  # type: ignore
             "personal_data": self.personal_data.to_dict(),
             "contact": self.contact.to_dict(),
             "address": self.address.to_dict(),
-            "password_reset": [
-                reset.to_dict() for reset in self.password_reset
-            ],
+            "password_reset": [reset.to_dict() for reset in self.password_reset],
             "my_games": [game.to_dict() for game in self.my_games],
             "user_cart": [cart.to_dict() for cart in self.user_cart],
             "upvotes": [game.to_dict() for game in self.upvotes],
@@ -245,9 +241,7 @@ class myGames(db.Model):  # type: ignore for some reason mypy is not happy with 
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     game_id = db.Column(db.Integer, unique=True)
     added_at = db.Column(db.DateTime, default=db.func.now())
-    is_downloaded = db.Column(
-        db.Boolean, default=False
-    )  # if the game is downloaded
+    is_downloaded = db.Column(db.Boolean, default=False)  # if the game is downloaded
 
     def to_dict(self) -> dict:
         my_games_dict = {
@@ -309,9 +303,7 @@ class Upvotes(db.Model):  # type: ignore for some reason mypy is not happy with 
         return starred_games_dict
 
     def __repr__(self):
-        return (
-            f"<starred_games> user_id={self.user_id}, game_id={self.game_id}"
-        )
+        return f"<starred_games> user_id={self.user_id}, game_id={self.game_id}"
 
 
 class productsHistory(db.Model):  # type: ignore for some reason mypy is not happy with this

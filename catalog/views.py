@@ -41,8 +41,8 @@ def home():
     games_count = 0
 
     # Get the cloud functions urls
-    get_games_by_tag_url = get_cloud_function_url("get_games_by_tags")
-    get_games_by_id_url = get_cloud_function_url("get-game-by-id")
+    get_games_by_tag_url = get_cloud_function_url("get_game_by_tags")
+    get_games_by_id_url = get_cloud_function_url("get_game_by_id")
 
     # Get all games
     home_games = requests.get(
@@ -93,8 +93,8 @@ def details():
     user_games_ids = []
 
     # Get the cloud functions urls
-    get_games_by_id_url = get_cloud_function_url("get-game-by-id")
-    get_games_by_tag_url = get_cloud_function_url("get_games_by_tags")
+    get_games_by_id_url = get_cloud_function_url("get_game_by_id")
+    get_games_by_tag_url = get_cloud_function_url("get_game_by_tags")
 
     game_dict = requests.get(
         get_games_by_id_url,
@@ -164,7 +164,7 @@ def browse():
 
     most_upvoted_games = []
     # Get the cloud functions urls
-    get_games_by_tag_url = get_cloud_function_url("get_games_by_tags")
+    get_games_by_tag_url = get_cloud_function_url("get_game_by_tags")
 
     # Get the most upvoted games
     most_upvoted_games = requests.get(
@@ -237,8 +237,8 @@ def upvote():
     game_id = request.args.get("game_id", None)
 
     # Get the cloud functions urls
-    get_game_by_id_url = get_cloud_function_url("get-game-by-id")
-    edit_game_by_id_url = get_cloud_function_url("edit-product-by-id")
+    get_game_by_id_url = get_cloud_function_url("get_game_by_id")
+    edit_game_by_id_url = get_cloud_function_url("edit_game_by_id")
     # Get the game
     game = requests.get(
         get_game_by_id_url,
@@ -285,8 +285,8 @@ def downvote():
     game_id = request.args.get("game_id", None)
 
     # Get the cloud functions urls
-    get_game_by_id_url = get_cloud_function_url("get-game-by-id")
-    edit_game_by_id_url = get_cloud_function_url("edit-product-by-id")
+    get_game_by_id_url = get_cloud_function_url("get_game_by_id")
+    edit_game_by_id_url = get_cloud_function_url("edit_game_by_id")
 
     # Get the upvote table
     upvote_table = Upvotes.query.filter_by(
@@ -358,9 +358,7 @@ def add_to_my_cart():
 def remove_from_my_cart():
 
     game_id = request.args.get("game_id", None)
-    landing_from = request.args.get(
-        "landing_from", None
-    )  # "details" or "profile"
+    landing_from = request.args.get("landing_from", None)  # "details" or "profile"
 
     if landing_from == "details":
         redirect_url = "catalog.details"
@@ -439,7 +437,7 @@ def list_games():
     sort_type = int(sort_type) if sort_type else 1
 
     # Get the cloud functions urls
-    get_games_url = get_cloud_function_url("get-product-by-full-textsearch")
+    get_games_url = get_cloud_function_url("get_game_by_full_text_search")
 
     # Get the games
     games = requests.get(
