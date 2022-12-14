@@ -91,9 +91,7 @@ def get_cloud_function_url(function_name: str) -> str:
     # ? Maybe we can get this url from the environment variables
     """
 
-    return (
-        f"https://us-central1-teste-371002.cloudfunctions.net/{function_name}"
-    )
+    return f"https://us-central1-gamestore-366812.cloudfunctions.net/{function_name}"
 
 
 def verify_jwt_access_token(request: Request):
@@ -149,7 +147,8 @@ def generate_jwt_access_token(payload: dict) -> str:
     # ! Important: For some reason, the private key is not working with the ``open`` function, so we need to use full path to the file
     # ! but it works fine in google cloud functions
     private_key = open(
-        r"C:\Users\jedma\Desktop\projects\clone\GameStore\cloud_functions\private_key.pem",
+        r"/Users/mary/dev/GameStore/GameStore-1/cloud_functions/private_key.pem",
+        "r",
         encoding="utf-8",
     ).read()
     # Is a good practice to read the key from a file, so, we can change the key without change the code
