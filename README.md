@@ -24,25 +24,22 @@
 <br>
 <section class="section">
     <h1 class="section-title">
-        Esta aplicacao esta sendo desevolvida para disponibilizar jogos online atraves de serial-keys para os jogadores terem acesso nas mais diversas plataformas de game.
+        This application is being developed to make online games available through serial-keys for players to have access on the most diverse game platforms.
     </h1>
         <ul>
             <li>
-                Catalago dos Games
+                Games Catalog
                 <ol>
-                    <li>Filtro de busca por Categorias</li>
-                    <li>Filtro de busca por Genero</li>
-                    <li>Filtro de busca fuzzy</li>
+                    <li>Fuzzy search filter</li>
                 </ol>
             </li>
         </ul>
         <ul>
-            <li>Sistema de Reviews</li>
-            <li>Forum de discussoes*</li>
-            <li>API para coletar dados dos usuarios</li>
-            <li>Multiplas formas de login</li>
-            <li>Documentacoes</li>
-            <li>Testes</li>
+            <li>Reviews System</li>
+            <li>API to collect user data</li>
+            <li>Authentication Login</li>
+            <li>Documentation</li>
+            <li>Tests</li>
         </ul>
         <p>The app should include the basic functions listed prior and also consider the following requirements:
         Google Cloud function: Implement Google Cloud functions to enhance your App’s flexibility
