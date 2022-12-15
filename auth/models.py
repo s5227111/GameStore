@@ -28,7 +28,7 @@ def load_user(user_id: int) -> Union[db.Model, None]:  # type: ignore
 def configure(app, test_mode=False):
 
     if test_mode:
-        DB_URI = "mysql://root:1234@34.89.56.248/gamestore"
+        DB_URI = "mysql://root:1234@127.0.0.1/unittest"
     else:
         DB_URI = "mysql://root:1234@34.89.56.248/gamestore"
 
