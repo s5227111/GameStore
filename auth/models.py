@@ -339,7 +339,7 @@ class UserQuery:
         if the email or username is already in use and password is correct
         """
 
-        user = User.query.filter_by(id=user_id).first()
+        user = User.query.filter_by(id=user_id)
 
         # check if password is the same that is registered and remove it from the data
         if "password" in data:

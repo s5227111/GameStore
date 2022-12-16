@@ -112,7 +112,9 @@ def register():
             user = User.query.filter_by(username=username).first()
 
             if user:
-                return render_template("auth/register.html", username_exists=True)
+                return render_template(
+                    "auth/register.html", username_exists=True
+                )
 
             # Create user
             us = UserSchema()
@@ -195,7 +197,7 @@ def profile():
     user_games = []
 
     # Get cloud function url
-    get_game_by_id_url = get_cloud_function_url("get_game_by_id")
+    get_game_by_id_url = get_cloud_function_url("get-game-by-id")
 
     for g in current_user_games_ids:
 
