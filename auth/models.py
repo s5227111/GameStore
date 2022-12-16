@@ -239,7 +239,7 @@ class myGames(db.Model):  # type: ignore for some reason mypy is not happy with 
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    game_id = db.Column(db.Integer, unique=True)
+    game_id = db.Column(db.Integer)
     added_at = db.Column(db.DateTime, default=db.func.now())
     is_downloaded = db.Column(db.Boolean, default=False)  # if the game is downloaded
 
@@ -290,7 +290,7 @@ class Upvotes(db.Model):  # type: ignore for some reason mypy is not happy with 
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    game_id = db.Column(db.Integer, unique=True)
+    game_id = db.Column(db.Integer)
     added_at = db.Column(db.DateTime, default=db.func.now())
 
     def to_dict(self) -> dict:
@@ -339,7 +339,7 @@ class UserQuery:
         if the email or username is already in use and password is correct
         """
 
-        user = User.query.filter_by(id=user_id)
+        user = User.query.filter_by(id=user_id).first()
 
         # check if password is the same that is registered and remove it from the data
         if "password" in data:
